@@ -3,12 +3,9 @@
 #include <string>
 #include <tomcrypt.h>
 
-namespace utils::cryptography
-{
-	namespace ecc
-	{
-		class key final
-		{
+namespace utils::cryptography {
+	namespace ecc {
+		class key final {
 		public:
 			key();
 			~key();
@@ -53,67 +50,56 @@ namespace utils::cryptography
 		bool decrypt(const key& key, std::string& data);
 	}
 
-	namespace rsa
-	{
+	namespace rsa {
 		std::string encrypt(const std::string& data, const std::string& hash, const std::string& key);
 	}
 
-	namespace des3
-	{
+	namespace des3 {
 		std::string encrypt(const std::string& data, const std::string& iv, const std::string& key);
 		std::string decrypt(const std::string& data, const std::string& iv, const std::string& key);
 	}
 
-	namespace tiger
-	{
+	namespace tiger {
 		std::string compute(const std::string& data, bool hex = false);
 		std::string compute(const uint8_t* data, size_t length, bool hex = false);
 	}
 
-	namespace aes
-	{
+	namespace aes {
 		std::string encrypt(const std::string& data, const std::string& iv, const std::string& key);
 		std::string decrypt(const std::string& data, const std::string& iv, const std::string& key);
 	}
 
-	namespace hmac_sha1
-	{
+	namespace hmac_sha1 {
 		std::string compute(const std::string& data, const std::string& key);
 	}
 
-	namespace sha1
-	{
+	namespace sha1 {
 		std::string compute(const std::string& data, bool hex = false);
 		std::string compute(const uint8_t* data, size_t length, bool hex = false);
 	}
 
-	namespace sha256
-	{
+	namespace sha256 {
 		std::string compute(const std::string& data, bool hex = false);
 		std::string compute(const uint8_t* data, size_t length, bool hex = false);
 	}
 
-	namespace sha512
-	{
+	namespace sha512 {
 		std::string compute(const std::string& data, bool hex = false);
 		std::string compute(const uint8_t* data, size_t length, bool hex = false);
 	}
 
-	namespace base64
-	{
+	namespace base64 {
 		std::string encode(const uint8_t* data, size_t len);
 		std::string encode(const std::string& data);
 		std::string decode(const std::string& data);
 	}
 
-	namespace jenkins_one_at_a_time
-	{
+	namespace jenkins_one_at_a_time {
 		unsigned int compute(const std::string& data);
 		unsigned int compute(const char* key, size_t len);
 	};
 
-	namespace random
-	{
+	namespace random {
 		uint32_t get_integer();
 		std::string get_challenge();
 		void get_data(void* data, size_t size);

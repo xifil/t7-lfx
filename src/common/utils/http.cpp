@@ -4,30 +4,22 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-namespace utils::http
-{
-	namespace
-	{
-		struct progress_helper
-		{
+namespace utils::http {
+	namespace {
+		struct progress_helper {
 			const std::function<void(size_t)>* callback{};
 			std::exception_ptr exception{};
 		};
 
-		int progress_callback(void* clientp, const curl_off_t /*dltotal*/, const curl_off_t dlnow,
-		                      const curl_off_t /*ultotal*/, const curl_off_t /*ulnow*/)
-		{
+		int progress_callback(void* clientp, const curl_off_t /*dltotal*/, const curl_off_t dlnow, const curl_off_t /*ultotal*/, const curl_off_t /*ulnow*/) {
 			auto* helper = static_cast<progress_helper*>(clientp);
 
-			try
-			{
-				if (*helper->callback)
-				{
+			try {
+				if (*helper->callback) {
 					(*helper->callback)(dlnow);
 				}
 			}
-			catch (...)
-			{
+			catch (...) {
 				helper->exception = std::current_exception();
 				return -1;
 			}
@@ -35,8 +27,7 @@ namespace utils::http
 			return 0;
 		}
 
-		size_t write_callback(void* contents, const size_t size, const size_t nmemb, void* userp)
-		{
+		size_t write_callback(void* contents, const size_t size, const size_t nmemb, void* userp) {
 			auto* buffer = static_cast<std::string*>(userp);
 
 			const auto total_size = size * nmemb;
@@ -45,24 +36,19 @@ namespace utils::http
 		}
 	}
 
-	std::optional<std::string> get_data(const std::string& url, const headers& headers,
-	                                    const std::function<void(size_t)>& callback, const uint32_t retries)
-	{
+	std::optional<std::string> get_data(const std::string& url, const headers& headers, const std::function<void(size_t)>& callback, const uint32_t retries) {
 		curl_slist* header_list = nullptr;
 		auto* curl = curl_easy_init();
-		if (!curl)
-		{
+		if (!curl) {
 			return {};
 		}
 
-		auto _ = utils::finally([&]()
-		{
+		auto _ = utils::finally([&]() {
 			curl_slist_free_all(header_list);
 			curl_easy_cleanup(curl);
 		});
 
-		for (const auto& header : headers)
-		{
+		for (const auto& header : headers) {
 			auto data = header.first + ": " + header.second;
 			header_list = curl_slist_append(header_list, data.data());
 		}
@@ -84,33 +70,27 @@ namespace utils::http
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 
-		for (auto i = 0u; i < retries + 1; ++i)
-		{
+		for (auto i = 0u; i < retries + 1; ++i) {
 			// Due to CURLOPT_FAILONERROR, CURLE_OK will not be met when the server returns 400 or 500
-			if (curl_easy_perform(curl) == CURLE_OK)
-			{
+			if (curl_easy_perform(curl) == CURLE_OK) {
 				long http_code = 0;
 				curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
-				if (http_code >= 200)
-				{
+				if (http_code >= 200) {
 					return {std::move(buffer)};
 				}
 
-				throw std::runtime_error(
-					"Bad status code " + std::to_string(http_code) + " met while trying to download file " + url);
+				throw std::runtime_error("Bad status code " + std::to_string(http_code) + " met while trying to download file " + url);
 			}
 
-			if (helper.exception)
-			{
+			if (helper.exception) {
 				std::rethrow_exception(helper.exception);
 			}
 
 			long http_code = 0;
 			curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
-			if (http_code > 0)
-			{
+			if (http_code > 0) {
 				break;
 			}
 		}
@@ -118,10 +98,8 @@ namespace utils::http
 		return {};
 	}
 
-	std::future<std::optional<std::string>> get_data_async(const std::string& url, const headers& headers)
-	{
-		return std::async(std::launch::async, [url, headers]()
-		{
+	std::future<std::optional<std::string>> get_data_async(const std::string& url, const headers& headers) {
+		return std::async(std::launch::async, [url, headers]() {
 			return get_data(url, headers);
 		});
 	}

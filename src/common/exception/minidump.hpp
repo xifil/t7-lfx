@@ -2,7 +2,6 @@
 
 #include "../utils/nt.hpp"
 
-namespace exception
-{
+namespace exception {
 	std::string create_minidump(LPEXCEPTION_POINTERS exceptioninfo);
 }

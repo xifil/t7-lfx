@@ -5,21 +5,19 @@
 
 // min and max is required by gdi, therefore NOMINMAX won't work
 #ifdef max
-#undef max
+#	undef max
 #endif
 
 #ifdef min
-#undef min
+#	undef min
 #endif
 
 #include <string>
 #include <functional>
 #include <filesystem>
 
-namespace utils::nt
-{
-	class library final
-	{
+namespace utils::nt {
+	class library final {
 	public:
 		static library load(const char* name);
 		static library load(const std::string& name);
@@ -30,9 +28,9 @@ namespace utils::nt
 		explicit library(const std::string& name);
 		explicit library(HMODULE handle);
 
-		library(const library& a) : module_(a.module_)
-		{
-		}
+		library(const library& a)
+			: module_(a.module_)
+		{}
 
 		bool operator!=(const library& obj) const { return !(*this == obj); };
 		bool operator==(const library& obj) const;
@@ -54,46 +52,50 @@ namespace utils::nt
 		[[nodiscard]] HMODULE get_handle() const;
 
 		template <typename T>
-		[[nodiscard]] T get_proc(const char* process) const
-		{
-			if (!this->is_valid()) T{};
+		[[nodiscard]] T get_proc(const char* process) const {
+			if (!this->is_valid()) {
+				return T{};
+			}
 			return reinterpret_cast<T>(GetProcAddress(this->module_, process));
 		}
 
 		template <typename T>
-		[[nodiscard]] T get_proc(const std::string& process) const
-		{
+		[[nodiscard]] T get_proc(const std::string& process) const {
 			return get_proc<T>(process.data());
 		}
 
 		template <typename T>
-		[[nodiscard]] std::function<T> get(const std::string& process) const
-		{
-			if (!this->is_valid()) return std::function<T>();
+		[[nodiscard]] std::function<T> get(const std::string& process) const {
+			if (!this->is_valid()) {
+				return std::function<T>();
+			}
 			return static_cast<T*>(this->get_proc<void*>(process));
 		}
 
 		template <typename T, typename... Args>
-		T invoke(const std::string& process, Args ... args) const
-		{
+		T invoke(const std::string& process, Args ... args) const {
 			auto method = this->get<T(__cdecl)(Args ...)>(process);
-			if (method) return method(args...);
+			if (method) {
+				return method(args...);
+			}
 			return T();
 		}
 
 		template <typename T, typename... Args>
-		T invoke_pascal(const std::string& process, Args ... args) const
-		{
+		T invoke_pascal(const std::string& process, Args ... args) const {
 			auto method = this->get<T(__stdcall)(Args ...)>(process);
-			if (method) return method(args...);
+			if (method) {
+				return method(args...);
+			}
 			return T();
 		}
 
 		template <typename T, typename... Args>
-		T invoke_this(const std::string& process, void* this_ptr, Args ... args) const
-		{
+		T invoke_this(const std::string& process, void* this_ptr, Args ... args) const {
 			auto method = this->get<T(__thiscall)(void*, Args ...)>(this_ptr, process);
-			if (method) return method(args...);
+			if (method) {
+				return method(args...);
+			}
 			return T();
 		}
 
@@ -111,20 +113,16 @@ namespace utils::nt
 	};
 
 	template <HANDLE InvalidHandle = nullptr>
-	class handle
-	{
+	class handle {
 	public:
 		handle() = default;
 
 		handle(const HANDLE h)
 			: handle_(h)
-		{
-		}
+		{}
 
-		~handle()
-		{
-			if (*this)
-			{
+		~handle() {
+			if (*this) {
 				CloseHandle(this->handle_);
 				this->handle_ = InvalidHandle;
 			}
@@ -139,10 +137,8 @@ namespace utils::nt
 			this->operator=(std::move(obj));
 		}
 
-		handle& operator=(handle&& obj) noexcept
-		{
-			if (this != &obj)
-			{
+		handle& operator=(handle&& obj) noexcept {
+			if (this != &obj) {
 				this->~handle();
 				this->handle_ = obj.handle_;
 				obj.handle_ = InvalidHandle;
@@ -151,21 +147,18 @@ namespace utils::nt
 			return *this;
 		}
 
-		handle& operator=(HANDLE h) noexcept
-		{
+		handle& operator=(HANDLE h) noexcept {
 			this->~handle();
 			this->handle_ = h;
 
 			return *this;
 		}
 
-		operator bool() const
-		{
+		operator bool() const {
 			return this->handle_ != InvalidHandle;
 		}
 
-		operator HANDLE() const
-		{
+		operator HANDLE() const {
 			return this->handle_;
 		}
 
@@ -174,15 +167,13 @@ namespace utils::nt
 	};
 
 
-	class registry_key
-	{
+	class registry_key {
 	public:
 		registry_key() = default;
 
 		registry_key(HKEY key)
 			: key_(key)
-		{
-		}
+		{}
 
 		registry_key(const registry_key&) = delete;
 		registry_key& operator=(const registry_key&) = delete;
@@ -193,10 +184,8 @@ namespace utils::nt
 			this->operator=(std::move(obj));
 		}
 
-		registry_key& operator=(registry_key&& obj) noexcept
-		{
-			if (this != obj.GetRef())
-			{
+		registry_key& operator=(registry_key&& obj) noexcept {
+			if (this != obj.GetRef()) {
 				this->~registry_key();
 				this->key_ = obj.key_;
 				obj.key_ = nullptr;
@@ -205,36 +194,29 @@ namespace utils::nt
 			return *this;
 		}
 
-		~registry_key()
-		{
-			if (this->key_)
-			{
+		~registry_key() {
+			if (this->key_) {
 				RegCloseKey(this->key_);
 			}
 		}
 
-		operator HKEY() const
-		{
+		operator HKEY() const {
 			return this->key_;
 		}
 
-		operator bool() const
-		{
+		operator bool() const {
 			return this->key_ != nullptr;
 		}
 
-		HKEY* operator&()
-		{
+		HKEY* operator&() {
 			return &this->key_;
 		}
 
-		registry_key* GetRef()
-		{
+		registry_key* GetRef() {
 			return this;
 		}
 
-		const registry_key* GetRef() const
-		{
+		const registry_key* GetRef() const {
 			return this;
 		}
 

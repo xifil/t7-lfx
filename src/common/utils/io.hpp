@@ -4,8 +4,7 @@
 #include <vector>
 #include <filesystem>
 
-namespace utils::io
-{
+namespace utils::io {
 	bool remove_file(const std::filesystem::path& file);
 	bool move_file(const std::filesystem::path& src, const std::filesystem::path& target);
 	bool file_exists(const std::string& file);

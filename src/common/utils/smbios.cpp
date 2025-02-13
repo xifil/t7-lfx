@@ -5,14 +5,11 @@
 #include <Windows.h>
 #include <intrin.h>
 
-namespace utils::smbios
-{
-	namespace
-	{
+namespace utils::smbios {
+	namespace {
 #pragma warning(push)
 #pragma warning(disable: 4200)
-		struct RawSMBIOSData
-		{
+		struct RawSMBIOSData {
 			BYTE Used20CallingMethod;
 			BYTE SMBIOSMajorVersion;
 			BYTE SMBIOSMinorVersion;
@@ -21,16 +18,14 @@ namespace utils::smbios
 			BYTE SMBIOSTableData[];
 		};
 
-		typedef struct
-		{
+		typedef struct {
 			BYTE type;
 			BYTE length;
 			WORD handle;
 		} dmi_header;
 #pragma warning(pop)
 
-		std::vector<uint8_t> get_smbios_data()
-		{
+		std::vector<uint8_t> get_smbios_data() {
 			DWORD size = 0;
 			std::vector<uint8_t> data{};
 
@@ -41,10 +36,8 @@ namespace utils::smbios
 			return data;
 		}
 
-		std::string parse_uuid(const uint8_t* data)
-		{
-			if (utils::memory::is_set(data, 0, 16) || utils::memory::is_set(data, -1, 16))
-			{
+		std::string parse_uuid(const uint8_t* data) {
+			if (utils::memory::is_set(data, 0, 16) || utils::memory::is_set(data, -1, 16)) {
 				return {};
 			}
 
@@ -61,28 +54,23 @@ namespace utils::smbios
 		}
 	}
 
-	std::string get_uuid()
-	{
+	std::string get_uuid() {
 		auto smbios_data = get_smbios_data();
 		auto* raw_data = reinterpret_cast<RawSMBIOSData*>(smbios_data.data());
 
 		auto* data = raw_data->SMBIOSTableData;
-		for (DWORD i = 0; i + sizeof(dmi_header) < raw_data->Length;)
-		{
+		for (DWORD i = 0; i + sizeof(dmi_header) < raw_data->Length;) {
 			auto* header = reinterpret_cast<dmi_header*>(data + i);
-			if (header->length < 4)
-			{
+			if (header->length < 4) {
 				return {};
 			}
 
-			if (header->type == 0x01 && header->length >= 0x19)
-			{
+			if (header->type == 0x01 && header->length >= 0x19) {
 				return parse_uuid(data + i + 0x8);
 			}
 
 			i += header->length;
-			while ((i + 1) < raw_data->Length && *reinterpret_cast<uint16_t*>(data + i) != 0)
-			{
+			while ((i + 1) < raw_data->Length && *reinterpret_cast<uint16_t*>(data + i) != 0) {
 				++i;
 			}
 

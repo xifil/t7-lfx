@@ -3,10 +3,8 @@
 #include <string>
 #include <chrono>
 
-namespace utils
-{
-	class named_mutex
-	{
+namespace utils {
+	class named_mutex {
 	public:
 		named_mutex(const std::string& name);
 		~named_mutex();

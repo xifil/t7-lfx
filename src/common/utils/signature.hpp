@@ -2,25 +2,22 @@
 #include "nt.hpp"
 #include <cstdint>
 
-namespace utils::hook
-{
-	class signature final
-	{
+namespace utils::hook {
+	class signature final {
 	public:
 		using signature_result = std::vector<uint8_t*>;
 
 		explicit signature(const std::string& pattern, const nt::library& library = {})
 			: signature(pattern, library.get_ptr(), library.get_optional_header()->SizeOfImage)
-		{
-		}
+		{}
 
 		signature(const std::string& pattern, void* start, void* end)
 			: signature(pattern, start, size_t(end) - size_t(start))
-		{
-		}
+		{}
 
 		signature(const std::string& pattern, void* start, const size_t length)
-			: start_(static_cast<uint8_t*>(start)), length_(length)
+			: start_(static_cast<uint8_t*>(start))
+			, length_(length)
 		{
 			this->load_pattern(pattern);
 		}

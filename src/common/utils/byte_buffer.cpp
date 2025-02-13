@@ -2,38 +2,30 @@
 
 #include <cstring>
 
-namespace utils
-{
+namespace utils {
 	byte_buffer::byte_buffer()
 		: writing_(true)
-	{
-	}
+	{}
 
 	byte_buffer::byte_buffer(std::string buffer)
 		: writing_(false)
-		  , buffer_(std::move(buffer))
-	{
-	}
+		, buffer_(std::move(buffer))
+	{}
 
-	void byte_buffer::write(const void* buffer, const size_t length)
-	{
-		if (!this->writing_)
-		{
+	void byte_buffer::write(const void* buffer, const size_t length) {
+		if (!this->writing_) {
 			throw std::runtime_error("Writing to readable byte buffer");
 		}
 
 		this->buffer_.append(static_cast<const char*>(buffer), length);
 	}
 
-	void byte_buffer::read(void* data, const size_t length)
-	{
-		if (this->writing_)
-		{
+	void byte_buffer::read(void* data, const size_t length) {
+		if (this->writing_) {
 			throw std::runtime_error("Reading from writable byte buffer");
 		}
 
-		if (this->offset_ + length > this->buffer_.size())
-		{
+		if (this->offset_ + length > this->buffer_.size()) {
 			throw std::runtime_error("Out of bounds read from byte buffer");
 		}
 
@@ -41,8 +33,7 @@ namespace utils
 		this->offset_ += length;
 	}
 
-	std::string byte_buffer::read_data(const size_t length)
-	{
+	std::string byte_buffer::read_data(const size_t length) {
 		std::string result{};
 		result.resize(length);
 

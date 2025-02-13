@@ -2,15 +2,12 @@
 #include <thread>
 #include "nt.hpp"
 
-namespace utils::hardware_breakpoint
-{
-	enum condition
-	{
+namespace utils::hardware_breakpoint {
+	enum condition {
 		execute = 0,
 		write = 1,
 		read_write = 3
 	};
-
 
 	void set_branch_tracing(bool enabled, CONTEXT& context);
 	void set_branch_tracing(bool enabled, uint32_t thread_id = GetCurrentThreadId());

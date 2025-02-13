@@ -2,10 +2,8 @@
 
 #include "com.hpp"
 
-namespace utils
-{
-	class progress_ui
-	{
+namespace utils {
+	class progress_ui {
 	public:
 		progress_ui(bool headless);
 		~progress_ui();
@@ -18,8 +16,7 @@ namespace utils
 
 		bool is_cancelled() const;
 
-		operator bool() const
-		{
+		operator bool() const {
 			return this->dialog_;
 		}
 

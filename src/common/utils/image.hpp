@@ -3,29 +3,23 @@
 #include <string>
 #include "nt.hpp"
 
-namespace utils::image
-{
-	struct image
-	{
+namespace utils::image {
+	struct image {
 		size_t width;
 		size_t height;
 		std::string data;
 	};
 
-	class object
-	{
+	class object {
 	public:
 		object() = default;
 
 		object(const HGDIOBJ h)
 			: handle_(h)
-		{
-		}
+		{}
 
-		~object()
-		{
-			if (*this)
-			{
+		~object() {
+			if (*this) {
 				DeleteObject(this->handle_);
 				this->handle_ = nullptr;
 			}
@@ -40,10 +34,8 @@ namespace utils::image
 			this->operator=(std::move(obj));
 		}
 
-		object& operator=(object&& obj) noexcept
-		{
-			if (this != &obj)
-			{
+		object& operator=(object&& obj) noexcept {
+			if (this != &obj) {
 				this->~object();
 				this->handle_ = obj.handle_;
 				obj.handle_ = nullptr;
@@ -52,31 +44,26 @@ namespace utils::image
 			return *this;
 		}
 
-		object& operator=(HANDLE h) noexcept
-		{
+		object& operator=(HANDLE h) noexcept {
 			this->~object();
 			this->handle_ = h;
 
 			return *this;
 		}
 
-		HGDIOBJ get() const
-		{
+		HGDIOBJ get() const {
 			return this->handle_;
 		}
 
-		operator bool() const
-		{
+		operator bool() const {
 			return this->handle_ != nullptr;
 		}
 
-		operator HGDIOBJ() const
-		{
+		operator HGDIOBJ() const {
 			return this->handle_;
 		}
 
-		operator LPARAM() const
-		{
+		operator LPARAM() const {
 			return reinterpret_cast<LPARAM>(this->handle_);
 		}
 

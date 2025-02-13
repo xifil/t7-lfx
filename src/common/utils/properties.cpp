@@ -12,32 +12,26 @@
 #include "com.hpp"
 #include "string.hpp"
 
-namespace utils::properties
-{
-	namespace
-	{
+namespace utils::properties {
+	namespace {
 		extern "C" void migrate_if_needed();
 
 		typedef rapidjson::EncodedOutputStream<rapidjson::UTF8<>, rapidjson::FileWriteStream> OutputStream;
 		typedef rapidjson::EncodedInputStream<rapidjson::UTF8<>, rapidjson::FileReadStream> InputStream;
 
-		std::filesystem::path get_properties_folder()
-		{
+		std::filesystem::path get_properties_folder() {
 			static auto props = get_appdata_path() / "user";
 			return props;
 		}
 
-		std::filesystem::path get_properties_file()
-		{
-			static auto props = []
-			{
+		std::filesystem::path get_properties_file() {
+			static auto props = [] {
 				auto path = std::filesystem::path("boiii_players/properties.json");
 				const auto legacy_path = get_properties_folder() / "properties.json";
 
 				migrate_if_needed();
 
-				if (io::file_exists(legacy_path) && !io::file_exists(path))
-				{
+				if (io::file_exists(legacy_path) && !io::file_exists(path)) {
 					std::error_code e;
 					std::filesystem::copy(legacy_path, path, std::filesystem::copy_options::skip_existing, e);
 				}
@@ -47,8 +41,7 @@ namespace utils::properties
 			return props;
 		}
 
-		rapidjson::Document load_properties()
-		{
+		rapidjson::Document load_properties() {
 			rapidjson::Document default_doc{};
 			default_doc.SetObject();
 
@@ -58,15 +51,12 @@ namespace utils::properties
 
 			FILE* fp;
 			auto err = _wfopen_s(&fp, props.data(), L"rb");
-			if (err || !fp)
-			{
+			if (err || !fp) {
 				return default_doc;
 			}
 
-			const auto _ = finally([&]
-			{
-				if (fp)
-				{
+			const auto _ = finally([&] {
+				if (fp) {
 					fclose(fp);
 				}
 			});
@@ -78,16 +68,14 @@ namespace utils::properties
 			rapidjson::Document doc{};
 			const rapidjson::ParseResult result = doc.ParseStream<rapidjson::kParseNoFlags, rapidjson::UTF8<>>(eis);
 
-			if (!result || !doc.IsObject())
-			{
+			if (!result || !doc.IsObject()) {
 				return default_doc;
 			}
 
 			return doc;
 		}
 
-		void store_properties(const rapidjson::Document& doc)
-		{
+		void store_properties(const rapidjson::Document& doc) {
 			char write_buffer[256]{0}; // Raw buffer for writing
 
 			const std::wstring& props = get_properties_file();
@@ -95,15 +83,12 @@ namespace utils::properties
 
 			FILE* fp;
 			auto err = _wfopen_s(&fp, props.data(), L"wb");
-			if (err || !fp)
-			{
+			if (err || !fp) {
 				return;
 			}
 
-			const auto _ = finally([&]
-			{
-				if (fp)
-				{
+			const auto _ = finally([&] {
+				if (fp) {
 					fclose(fp);
 				}
 			});
@@ -116,16 +101,13 @@ namespace utils::properties
 		}
 	}
 
-	std::filesystem::path get_appdata_path()
-	{
+	std::filesystem::path get_appdata_path() {
 		PWSTR path;
-		if (!SUCCEEDED(SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, nullptr, &path)))
-		{
+		if (!SUCCEEDED(SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, nullptr, &path))) {
 			throw std::runtime_error("Failed to read APPDATA path!");
 		}
 
-		auto _ = utils::finally([&path]
-		{
+		auto _ = utils::finally([&path] {
 			CoTaskMemFree(path);
 		});
 
@@ -133,38 +115,32 @@ namespace utils::properties
 		return appdata;
 	}
 
-	std::unique_lock<named_mutex> lock()
-	{
-		static named_mutex mutex{"boiii-properties-lock"};
+	std::unique_lock<named_mutex> lock() {
+		static named_mutex mutex{ "boiii-properties-lock" };
 		return std::unique_lock{mutex};
 	}
 
-	std::optional<std::string> load(const std::string& name)
-	{
+	std::optional<std::string> load(const std::string& name) {
 		const auto _ = lock();
 		const auto doc = load_properties();
 
-		if (!doc.HasMember(name))
-		{
+		if (!doc.HasMember(name)) {
 			return {};
 		}
 
 		const auto& value = doc[name];
-		if (!value.IsString())
-		{
+		if (!value.IsString()) {
 			return {};
 		}
 
 		return {std::string{value.GetString()}};
 	}
 
-	void store(const std::string& name, const std::string& value)
-	{
+	void store(const std::string& name, const std::string& value) {
 		const auto _ = lock();
 		auto doc = load_properties();
 
-		while (doc.HasMember(name))
-		{
+		while (doc.HasMember(name)) {
 			doc.RemoveMember(name);
 		}
 

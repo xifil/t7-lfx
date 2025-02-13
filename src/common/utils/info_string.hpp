@@ -3,10 +3,8 @@
 #include <string>
 #include <unordered_map>
 
-namespace utils
-{
-	class info_string
-	{
+namespace utils {
+	class info_string {
 	public:
 		info_string() = default;
 		explicit info_string(const std::string& buffer);
