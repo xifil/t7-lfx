@@ -76,7 +76,7 @@ namespace exception
 			utils::thread::suspend_other_threads();
 			show_mouse_cursor();
 
-			game::show_error(error_str.data(), "Ezz ERROR");
+			game::show_error(error_str.data(), "t7-lfx ERROR");
 
 			TerminateProcess(GetCurrentProcess(), exception_data.code);
 		}
@@ -89,7 +89,7 @@ namespace exception
 				++recovery_data.recovery_counts;
 
 				game::Com_Error(game::ERR_DROP, "Fatal error (0x%08X) at 0x%p (0x%p).\nA minidump has been written.\n\n"
-				                "Ezz has tried to recover your game, but it might not run stable anymore.\n\n"
+				                "t7-lfx has tried to recover your game, but it might not run stable anymore.\n\n"
 				                "Make sure to update your graphics card drivers and install operating system updates!\n"
 				                "Closing or restarting Steam might also help.",
 				                exception_data.code, exception_data.address,
@@ -134,13 +134,21 @@ namespace exception
 				info.append("\r\n");
 			};
 
-			line("Ezz Crash Dump");
+			line("t7-lfx Crash Dump");
 			line(std::string{});
 			line("Version: "s + VERSION);
 			line("Timestamp: "s + get_timestamp());
 			line(utils::string::va("Exception: 0x%08X", exceptioninfo->ExceptionRecord->ExceptionCode));
 			line(utils::string::va("Address: 0x%llX", exceptioninfo->ExceptionRecord->ExceptionAddress));
-			line(utils::string::va("Base: 0x%llX", game::get_base()));
+			line(utils::string::va("Game base: 0x%llX", game::get_base()));
+			utils::nt::library exc_mod = utils::nt::library::get_by_address(exceptioninfo->ExceptionRecord->ExceptionAddress);
+			if (exc_mod)
+			{
+				line(utils::string::va("Module base: 0x%llX", exc_mod.get_ptr()));
+				line(utils::string::va("Address relative to module: 0x%llX",
+					reinterpret_cast<std::uintptr_t>(exceptioninfo->ExceptionRecord->ExceptionAddress) -
+					reinterpret_cast<std::uintptr_t>(exc_mod.get_ptr())));
+			}
 
 #pragma warning(push)
 #pragma warning(disable: 4996)
@@ -157,13 +165,13 @@ namespace exception
 
 		void write_minidump(const LPEXCEPTION_POINTERS exceptioninfo)
 		{
-			const std::string crash_name = utils::string::va("minidumps/ezz-crash-%s.zip",
+			const std::string crash_name = utils::string::va("minidumps/t7-lfx-crash-%s.zip",
 			                                                 get_timestamp().data());
 
 			utils::compression::zip::archive zip_file{};
 			zip_file.add("crash.dmp", create_minidump(exceptioninfo));
 			zip_file.add("info.txt", generate_crash_info(exceptioninfo));
-			zip_file.write(crash_name, "Ezz Crash Dump");
+			zip_file.write(crash_name, "t7-lfx Crash Dump");
 		}
 
 		bool is_harmless_error(const LPEXCEPTION_POINTERS exceptioninfo)

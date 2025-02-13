@@ -24,9 +24,9 @@ namespace discord
 			discord_presence.partySize = 0;
 			discord_presence.partyMax = 0;
 			discord_presence.startTimestamp = time(0);
-			discord_presence.largeImageKey = "logo";
-			discord_presence.smallImageKey = "sexy";
-			discord_presence.details = "Playing BO3 via Ezz!";
+			discord_presence.largeImageKey = "logo-rpc";
+			discord_presence.smallImageKey = "lfx";
+			discord_presence.details = "Using t7-lfx (Ezz fork)";
 
 			Discord_UpdatePresence(&discord_presence);
 		}
@@ -51,7 +51,7 @@ namespace discord
 			handlers.spectateGame = nullptr;
 			handlers.joinRequest = nullptr;
 
-			Discord_Initialize("967371125573177474", &handlers, 1, nullptr);
+			Discord_Initialize("1338941723912441896", &handlers, 1, nullptr);
 
 			this->initialized_ = true;
 

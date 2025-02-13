@@ -1,4 +1,5 @@
 #include <std_include.hpp>
+#include <utils/flags.hpp>
 #include "../steam.hpp"
 
 namespace steam
@@ -50,7 +51,8 @@ namespace steam
 
 	unsigned int utils::GetAppID()
 	{
-		return 311210;
+		static const auto spacewar = ::utils::flags::has_flag("spacewar");
+		return spacewar ? 480 /* Spacewar */ : 311210 /* Call of Duty: Black Ops III */;
 	}
 
 	void utils::SetOverlayNotificationPosition(int eNotificationPosition)
