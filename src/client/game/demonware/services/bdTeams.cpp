@@ -1,407 +1,357 @@
 #include <std_include.hpp>
 #include "../services.hpp"
 
-namespace demonware
-{
-	bdTeams::bdTeams() : service(3, "bdTeams")
+namespace demonware {
+	bdTeams::bdTeams()
+		: service(3, "bdTeams")
 	{
-		this->register_task(30, &bdTeams::createTeam);
-		this->register_task(31, &bdTeams::updateTeamName);
-		this->register_task(32, &bdTeams::promoteMember);
-		this->register_task(33, &bdTeams::kickMember);
-		this->register_task(34, &bdTeams::leaveTeam);
-		this->register_task(35, &bdTeams::proposeMembership);
-		this->register_task(36, &bdTeams::rejectMembership);
-		this->register_task(37, &bdTeams::acceptMembership);
-		this->register_task(38, &bdTeams::getPublicProfiles);
-		this->register_task(39, &bdTeams::getPrivateProfile);
-		this->register_task(40, &bdTeams::getPublicMemberProfiles);
-		this->register_task(41, &bdTeams::getPrivateMemberProfiles);
-		this->register_task(42, &bdTeams::setPublicProfile);
-		this->register_task(43, &bdTeams::setPrivateProfile);
-		this->register_task(44, &bdTeams::setPublicMemberProfile);
-		this->register_task(45, &bdTeams::setPrivateMemberProfile);
-		this->register_task(46, &bdTeams::getMemberships);
-		this->register_task(47, &bdTeams::getMembers);
-		this->register_task(48, &bdTeams::getOutgoingProposals);
-		this->register_task(49, &bdTeams::withdrawProposal);
-		this->register_task(50, &bdTeams::demoteMember);
-		this->register_task(51, &bdTeams::promoteMemberToOwner);
-		this->register_task(52, &bdTeams::getTeamInfo);
-		this->register_task(53, &bdTeams::getIncomingProposals);
-		this->register_task(54, &bdTeams::sendInstantMessage);
-		this->register_task(56, &bdTeams::getMembershipsUser);
-		this->register_task(57, &bdTeams::sendInstantMessageToTeam);
-		this->register_task(58, &bdTeams::searchPublicTeamProfiles);
-		this->register_task(63, &bdTeams::addApplication);
-		this->register_task(64, &bdTeams::getApplicationsByTeam);
-		this->register_task(65, &bdTeams::acceptApplication);
-		this->register_task(66, &bdTeams::rejectApplication);
-		this->register_task(68, &bdTeams::autoJoinTeam);
-		this->register_task(70, &bdTeams::createTeamWithProfiles);
-		this->register_task(73, &bdTeams::banMember);
-		this->register_task(74, &bdTeams::unbanMember);
-		this->register_task(76, &bdTeams::blockApplication);
-		this->register_task(78, &bdTeams::unblockApplication);
-		this->register_task(80, &bdTeams::updateTeamType);
-		this->register_task(82, &bdTeams::setOnline);
-		this->register_task(83, &bdTeams::getMembershipsWithCounts);
-		this->register_task(84, &bdTeams::getMembershipsWithCountsUser);
-		this->register_task(85, &bdTeams::searchTeams);
-		this->register_task(86, &bdTeams::createTeamWithProfilesAndTeamType);
-		this->register_task(87, &bdTeams::getMembershipsWithCountsAndTeamTypeUser);
-		this->register_task(88, &bdTeams::getMembershipsWithCountsAndTeamType);
-		this->register_task(89, &bdTeams::getTeamInfoWithTeamType);
-		this->register_task(91, &bdTeams::setTeamAutoJoin);
-		this->register_task(92, &bdTeams::getTeamAutoJoin);
-		this->register_task(94, &bdTeams::getMembersAndPrivileges);
+		this->register_task(30, &bdTeams::create_team);
+		this->register_task(31, &bdTeams::update_team_name);
+		this->register_task(32, &bdTeams::promote_member);
+		this->register_task(33, &bdTeams::kick_member);
+		this->register_task(34, &bdTeams::leave_team);
+		this->register_task(35, &bdTeams::propose_membership);
+		this->register_task(36, &bdTeams::reject_membership);
+		this->register_task(37, &bdTeams::accept_membership);
+		this->register_task(38, &bdTeams::get_public_profiles);
+		this->register_task(39, &bdTeams::get_private_profile);
+		this->register_task(40, &bdTeams::get_public_member_profiles);
+		this->register_task(41, &bdTeams::get_private_member_profiles);
+		this->register_task(42, &bdTeams::set_public_profile);
+		this->register_task(43, &bdTeams::set_private_profile);
+		this->register_task(44, &bdTeams::set_public_member_profile);
+		this->register_task(45, &bdTeams::set_private_member_profile);
+		this->register_task(46, &bdTeams::get_memberships);
+		this->register_task(47, &bdTeams::get_members);
+		this->register_task(48, &bdTeams::get_outgoing_proposals);
+		this->register_task(49, &bdTeams::withdraw_proposal);
+		this->register_task(50, &bdTeams::demote_member);
+		this->register_task(51, &bdTeams::promote_member_to_owner);
+		this->register_task(52, &bdTeams::get_team_info);
+		this->register_task(53, &bdTeams::get_incoming_proposals);
+		this->register_task(54, &bdTeams::send_instant_message);
+		this->register_task(56, &bdTeams::get_memberships_user);
+		this->register_task(57, &bdTeams::send_instant_message_to_team);
+		this->register_task(58, &bdTeams::search_public_team_profiles);
+		this->register_task(63, &bdTeams::add_application);
+		this->register_task(64, &bdTeams::get_applications_by_team);
+		this->register_task(65, &bdTeams::accept_application);
+		this->register_task(66, &bdTeams::reject_application);
+		this->register_task(68, &bdTeams::auto_join_team);
+		this->register_task(70, &bdTeams::create_team_with_profiles);
+		this->register_task(73, &bdTeams::ban_member);
+		this->register_task(74, &bdTeams::unban_member);
+		this->register_task(76, &bdTeams::block_application);
+		this->register_task(78, &bdTeams::unblock_application);
+		this->register_task(80, &bdTeams::update_team_type);
+		this->register_task(82, &bdTeams::set_online);
+		this->register_task(83, &bdTeams::get_memberships_with_counts);
+		this->register_task(84, &bdTeams::get_memberships_with_counts_user);
+		this->register_task(85, &bdTeams::search_teams);
+		this->register_task(86, &bdTeams::create_team_with_profiles_and_team_type);
+		this->register_task(87, &bdTeams::get_memberships_with_counts_and_team_type_user);
+		this->register_task(88, &bdTeams::get_memberships_with_counts_and_team_type);
+		this->register_task(89, &bdTeams::get_team_info_with_team_type);
+		this->register_task(91, &bdTeams::set_team_auto_join);
+		this->register_task(92, &bdTeams::get_team_auto_join);
+		this->register_task(94, &bdTeams::get_members_and_privileges);
 	}
 
-	void bdTeams::createTeam(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::create_team(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::updateTeamName(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::update_team_name(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::promoteMember(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::promote_member(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::kickMember(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::kick_member(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::leaveTeam(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::leave_team(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::proposeMembership(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::propose_membership(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::rejectMembership(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::reject_membership(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::acceptMembership(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::accept_membership(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getPublicProfiles(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_public_profiles(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getPrivateProfile(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_private_profile(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getPublicMemberProfiles(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_public_member_profiles(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getPrivateMemberProfiles(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_private_member_profiles(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::setPublicProfile(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::set_public_profile(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::setPrivateProfile(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::set_private_profile(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::setPublicMemberProfile(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::set_public_member_profile(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::setPrivateMemberProfile(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::set_private_member_profile(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getMemberships(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_memberships(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getMembers(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_members(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getOutgoingProposals(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_outgoing_proposals(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::withdrawProposal(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::withdraw_proposal(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::demoteMember(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::demote_member(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::promoteMemberToOwner(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::promote_member_to_owner(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getTeamInfo(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_team_info(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getIncomingProposals(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_incoming_proposals(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::sendInstantMessage(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::send_instant_message(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getMembershipsUser(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_memberships_user(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::sendInstantMessageToTeam(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::send_instant_message_to_team(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::searchPublicTeamProfiles(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::search_public_team_profiles(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::addApplication(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::add_application(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getApplicationsByTeam(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_applications_by_team(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::acceptApplication(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::accept_application(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::rejectApplication(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::reject_application(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::autoJoinTeam(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::auto_join_team(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::createTeamWithProfiles(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::create_team_with_profiles(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::banMember(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::ban_member(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::unbanMember(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::unban_member(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::blockApplication(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::block_application(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::unblockApplication(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::unblock_application(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::updateTeamType(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::update_team_type(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::setOnline(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::set_online(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getMembershipsWithCounts(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_memberships_with_counts(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getMembershipsWithCountsUser(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_memberships_with_counts_user(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::searchTeams(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::search_teams(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::createTeamWithProfilesAndTeamType(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::create_team_with_profiles_and_team_type(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getMembershipsWithCountsAndTeamTypeUser(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_memberships_with_counts_and_team_type_user(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getMembershipsWithCountsAndTeamType(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_memberships_with_counts_and_team_type(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getTeamInfoWithTeamType(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_team_info_with_team_type(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::setTeamAutoJoin(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::set_team_auto_join(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getTeamAutoJoin(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_team_auto_join(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdTeams::getMembersAndPrivileges(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdTeams::get_members_and_privileges(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();

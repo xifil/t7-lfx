@@ -1,6 +1,5 @@
 #pragma once
 
-namespace name
-{
+namespace name {
 	const char* get_player_name();
 }

@@ -1,9 +1,7 @@
 #pragma once
 
-namespace demonware
-{
-	class base_server
-	{
+namespace demonware {
+	class base_server {
 	public:
 		using stream_queue = std::queue<char>;
 		using data_queue = std::queue<std::string>;

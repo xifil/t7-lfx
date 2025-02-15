@@ -1,34 +1,28 @@
 #include <std_include.hpp>
 #include "udp_server.hpp"
 
-namespace demonware
-{
-	void udp_server::handle_input(const char* buf, size_t size, endpoint_data endpoint)
-	{
-		in_queue_.access([&](in_queue& queue)
-		{
+namespace demonware {
+	void udp_server::handle_input(const char* buf, size_t size, endpoint_data endpoint) {
+		in_queue_.access([&](in_queue& queue) {
 			in_packet p;
-			p.data = std::string{buf, size};
+			p.data = std::string{ buf, size };
+			p.data = std::string{ buf, size };
 			p.endpoint = std::move(endpoint);
 
 			queue.emplace(std::move(p));
 		});
 	}
 
-	size_t udp_server::handle_output(SOCKET socket, char* buf, size_t size, sockaddr* address, int* addrlen)
-	{
-		return out_queue_.access<size_t>([&](socket_queue_map& map) -> size_t
-		{
+	size_t udp_server::handle_output(SOCKET socket, char* buf, size_t size, sockaddr* address, int* addrlen) {
+		return out_queue_.access<size_t>([&](socket_queue_map& map) -> size_t {
 			const auto entry = map.find(socket);
-			if (entry == map.end())
-			{
+			if (entry == map.end()) {
 				return 0;
 			}
 
 			auto& queue = entry->second;
 
-			if (queue.empty())
-			{
+			if (queue.empty()) {
 				return 0;
 			}
 
@@ -44,13 +38,10 @@ namespace demonware
 		});
 	}
 
-	bool udp_server::pending_data(SOCKET socket)
-	{
-		return this->out_queue_.access<bool>([&](const socket_queue_map& map)
-		{
+	bool udp_server::pending_data(SOCKET socket) {
+		return this->out_queue_.access<bool>([&](const socket_queue_map& map) {
 			const auto entry = map.find(socket);
-			if (entry == map.end())
-			{
+			if (entry == map.end()) {
 				return false;
 			}
 
@@ -58,10 +49,8 @@ namespace demonware
 		});
 	}
 
-	void udp_server::send(const endpoint_data& endpoint, std::string data)
-	{
-		out_queue_.access([&](socket_queue_map& map)
-		{
+	void udp_server::send(const endpoint_data& endpoint, std::string data) {
+		out_queue_.access([&](socket_queue_map& map) {
 			out_packet p;
 			p.data = std::move(data);
 			p.address = endpoint.address;
@@ -70,20 +59,15 @@ namespace demonware
 		});
 	}
 
-	void udp_server::frame()
-	{
-		if (this->in_queue_.get_raw().empty())
-		{
+	void udp_server::frame() {
+		if (this->in_queue_.get_raw().empty()) {
 			return;
 		}
 
-		while (true)
-		{
+		while (true) {
 			in_packet packet{};
-			const auto result = this->in_queue_.access<bool>([&](in_queue& queue)
-			{
-				if (queue.empty())
-				{
+			const auto result = this->in_queue_.access<bool>([&](in_queue& queue) {
+				if (queue.empty()) {
 					return false;
 				}
 
@@ -92,8 +76,7 @@ namespace demonware
 				return true;
 			});
 
-			if (!result)
-			{
+			if (!result) {
 				break;
 			}
 

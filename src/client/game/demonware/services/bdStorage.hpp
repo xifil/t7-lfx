@@ -1,9 +1,7 @@
 #pragma once
 
-namespace demonware
-{
-	class bdStorage final : public service
-	{
+namespace demonware {
+	class bdStorage final : public service {
 	public:
 		bdStorage();
 

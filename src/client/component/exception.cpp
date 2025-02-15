@@ -13,65 +13,50 @@
 
 #include <version.hpp>
 
-namespace exception
-{
-	namespace
-	{
+namespace exception {
+	namespace {
 		DWORD main_thread_id{};
 
-		thread_local struct
-		{
+		thread_local struct {
 			DWORD code = 0;
 			PVOID address = nullptr;
 		} exception_data{};
 
-		struct
-		{
+		struct {
 			std::chrono::time_point<std::chrono::high_resolution_clock> last_recovery{};
-			std::atomic<int> recovery_counts = {0};
+			std::atomic<int> recovery_counts = { 0 };
 		} recovery_data{};
 
-		bool is_game_thread()
-		{
+		bool is_game_thread() {
 			return main_thread_id == GetCurrentThreadId();
 		}
 
-		bool is_exception_interval_too_short()
-		{
+		bool is_exception_interval_too_short() {
 			const auto delta = std::chrono::high_resolution_clock::now() - recovery_data.last_recovery;
 			return delta < 1min;
 		}
 
-		bool too_many_exceptions_occured()
-		{
+		bool too_many_exceptions_occured() {
 			return recovery_data.recovery_counts >= 3;
 		}
 
-		volatile bool& is_initialized()
-		{
+		volatile bool& is_initialized() {
 			static volatile bool initialized = false;
 			return initialized;
 		}
 
-		bool is_recoverable()
-		{
-			return is_initialized()
-				&& is_game_thread()
-				&& !is_exception_interval_too_short()
-				&& !too_many_exceptions_occured();
+		bool is_recoverable() {
+			return is_initialized() && is_game_thread()
+				&& !is_exception_interval_too_short() && !too_many_exceptions_occured();
 		}
 
-		void show_mouse_cursor()
-		{
+		void show_mouse_cursor() {
 			while (ShowCursor(TRUE) < 0);
 		}
 
-		void display_error_dialog()
-		{
-			const std::string error_str = utils::string::va("Fatal error (0x%08X) at 0x%p (0x%p).\n"
-			                                                "A minidump has been written.\n",
-			                                                exception_data.code, exception_data.address,
-				                                            game::derelocate(reinterpret_cast<uint64_t>(exception_data.address)));
+		void display_error_dialog() {
+			const std::string error_str = utils::string::va("Fatal error (0x%08X) at 0x%p (0x%p).\nA minidump has been written.\n",
+				exception_data.code, exception_data.address, game::derelocate(reinterpret_cast<uint64_t>(exception_data.address)));
 
 			utils::thread::suspend_other_threads();
 			show_mouse_cursor();
@@ -81,30 +66,24 @@ namespace exception
 			TerminateProcess(GetCurrentProcess(), exception_data.code);
 		}
 
-		void reset_state()
-		{
-			if (is_recoverable())
-			{
+		void reset_state() {
+			if (is_recoverable()) {
 				recovery_data.last_recovery = std::chrono::high_resolution_clock::now();
 				++recovery_data.recovery_counts;
 
 				game::Com_Error(game::ERR_DROP, "Fatal error (0x%08X) at 0x%p (0x%p).\nA minidump has been written.\n\n"
-				                "t7-lfx has tried to recover your game, but it might not run stable anymore.\n\n"
-				                "Make sure to update your graphics card drivers and install operating system updates!\n"
-				                "Closing or restarting Steam might also help.",
-				                exception_data.code, exception_data.address,
-					            game::derelocate(reinterpret_cast<uint64_t>(exception_data.address)));
+					"t7-lfx has tried to recover your game, but it might not run stable anymore.\n\n"
+					"Make sure to update your graphics card drivers and install operating system updates!\n"
+					"Closing or restarting Steam might also help.",
+					exception_data.code, exception_data.address, game::derelocate(reinterpret_cast<uint64_t>(exception_data.address)));
 			}
-			else
-			{
+			else {
 				display_error_dialog();
 			}
 		}
 
-		size_t get_reset_state_stub()
-		{
-			static auto* stub = utils::hook::assemble([](utils::hook::assembler& a)
-			{
+		size_t get_reset_state_stub() {
+			static auto* stub = utils::hook::assemble([](utils::hook::assembler& a) {
 				a.sub(rsp, 0x10);
 				a.or_(rsp, 0x8);
 				a.jmp(reset_state);
@@ -113,8 +92,7 @@ namespace exception
 			return reinterpret_cast<size_t>(stub);
 		}
 
-		std::string get_timestamp()
-		{
+		std::string get_timestamp() {
 			tm ltime{};
 			char timestamp[MAX_PATH] = {0};
 			const auto time = _time64(nullptr);
@@ -125,11 +103,9 @@ namespace exception
 			return timestamp;
 		}
 
-		std::string generate_crash_info(const LPEXCEPTION_POINTERS exceptioninfo)
-		{
+		std::string generate_crash_info(const LPEXCEPTION_POINTERS exceptioninfo) {
 			std::string info{};
-			const auto line = [&info](const std::string& text)
-			{
+			const auto line = [&info](const std::string& text) {
 				info.append(text);
 				info.append("\r\n");
 			};
@@ -142,31 +118,28 @@ namespace exception
 			line(utils::string::va("Address: 0x%llX", exceptioninfo->ExceptionRecord->ExceptionAddress));
 			line(utils::string::va("Game base: 0x%llX", game::get_base()));
 			utils::nt::library exc_mod = utils::nt::library::get_by_address(exceptioninfo->ExceptionRecord->ExceptionAddress);
-			if (exc_mod)
-			{
+			if (exc_mod) {
 				line(utils::string::va("Module base: 0x%llX", exc_mod.get_ptr()));
 				line(utils::string::va("Address relative to module: 0x%llX",
 					reinterpret_cast<std::uintptr_t>(exceptioninfo->ExceptionRecord->ExceptionAddress) -
 					reinterpret_cast<std::uintptr_t>(exc_mod.get_ptr())));
 			}
 
-#pragma warning(push)
-#pragma warning(disable: 4996)
+#			pragma warning(push)
+#			pragma warning(disable: 4996)
 			OSVERSIONINFOEXA version_info;
 			ZeroMemory(&version_info, sizeof(version_info));
 			version_info.dwOSVersionInfoSize = sizeof(version_info);
 			GetVersionExA(reinterpret_cast<LPOSVERSIONINFOA>(&version_info));
-#pragma warning(pop)
+#			pragma warning(pop)
 
 			line(utils::string::va("OS Version: %u.%u", version_info.dwMajorVersion, version_info.dwMinorVersion));
 
 			return info;
 		}
 
-		void write_minidump(const LPEXCEPTION_POINTERS exceptioninfo)
-		{
-			const std::string crash_name = utils::string::va("minidumps/t7-lfx-crash-%s.zip",
-			                                                 get_timestamp().data());
+		void write_minidump(const LPEXCEPTION_POINTERS exceptioninfo) {
+			const std::string crash_name = utils::string::va("minidumps/t7-lfx-crash-%s.zip", get_timestamp().data());
 
 			utils::compression::zip::archive zip_file{};
 			zip_file.add("crash.dmp", create_minidump(exceptioninfo));
@@ -174,16 +147,13 @@ namespace exception
 			zip_file.write(crash_name, "t7-lfx Crash Dump");
 		}
 
-		bool is_harmless_error(const LPEXCEPTION_POINTERS exceptioninfo)
-		{
+		bool is_harmless_error(const LPEXCEPTION_POINTERS exceptioninfo) {
 			const auto code = exceptioninfo->ExceptionRecord->ExceptionCode;
 			return code == STATUS_INTEGER_OVERFLOW || code == STATUS_FLOAT_OVERFLOW || code == STATUS_SINGLE_STEP;
 		}
 
-		LONG WINAPI exception_filter(const LPEXCEPTION_POINTERS exceptioninfo)
-		{
-			if (is_harmless_error(exceptioninfo))
-			{
+		LONG WINAPI exception_filter(const LPEXCEPTION_POINTERS exceptioninfo) {
+			if (is_harmless_error(exceptioninfo)) {
 				return EXCEPTION_CONTINUE_EXECUTION;
 			}
 
@@ -196,22 +166,18 @@ namespace exception
 			return EXCEPTION_CONTINUE_EXECUTION;
 		}
 
-		void WINAPI set_unhandled_exception_filter_stub(LPTOP_LEVEL_EXCEPTION_FILTER)
-		{
+		void WINAPI set_unhandled_exception_filter_stub(LPTOP_LEVEL_EXCEPTION_FILTER) {
 			// Don't register anything here...
 		}
 	}
 
-	struct component final : generic_component
-	{
-		component()
-		{
+	struct component final : generic_component {
+		component() {
 			main_thread_id = GetCurrentThreadId();
 			SetUnhandledExceptionFilter(exception_filter);
 		}
 
-		void post_load() override
-		{
+		void post_load() override {
 			const utils::nt::library ntdll("ntdll.dll");
 			auto* set_filter = ntdll.get_proc<void(*)(LPTOP_LEVEL_EXCEPTION_FILTER)>("RtlSetUnhandledExceptionFilter");
 

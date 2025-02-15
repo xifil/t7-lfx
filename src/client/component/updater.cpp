@@ -6,61 +6,46 @@
 #include <utils/flags.hpp>
 #include <updater/updater.hpp>
 
-namespace updater
-{
-	void update()
-	{
-		if (utils::flags::has_flag("noupdate"))
-		{
+namespace updater {
+	void update() {
+		if (utils::flags::has_flag("noupdate")) {
 			return;
 		}
 
-		try
-		{
+		try {
 			run(game::get_appdata_path());
 		}
-		catch (update_cancelled&)
-		{
+		catch (update_cancelled&) {
 			TerminateProcess(GetCurrentProcess(), 0);
 		}
-		catch (...)
-		{
-		}
+		catch (...) {}
 	}
 
-	class component final : public generic_component
-	{
+	class component final : public generic_component {
 	public:
-		component()
-		{
-			this->update_thread_ = std::thread([this]
-			{
+		component() {
+			this->update_thread_ = std::thread([this] {
 				update();
 			});
 		}
 
-		void pre_destroy() override
-		{
+		void pre_destroy() override {
 			join();
 		}
 
-		void post_unpack() override
-		{
+		void post_unpack() override {
 			join();
 		}
 
-		component_priority priority() const override
-		{
+		component_priority priority() const override {
 			return component_priority::updater;
 		}
 
 	private:
 		std::thread update_thread_{};
 
-		void join()
-		{
-			if (this->update_thread_.joinable())
-			{
+		void join() {
+			if (this->update_thread_.joinable()) {
 				this->update_thread_.join();
 			}
 		}

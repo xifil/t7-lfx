@@ -3,34 +3,30 @@
 //#define STEAM_EXPORT extern "C" __declspec(dllexport)
 #define STEAM_EXPORT
 
-struct raw_steam_id final
-{
+struct raw_steam_id final {
 	unsigned int account_id : 32;
 	unsigned int account_instance : 20;
 	unsigned int account_type : 4;
 	int universe : 8;
 };
 
-typedef union
-{
+typedef union {
 	raw_steam_id raw;
 	unsigned long long bits;
 } steam_id;
 
-#pragma pack( push, 1 )
-struct raw_game_id final
-{
+#pragma pack(push, 1)
+struct raw_game_id final {
 	unsigned int app_id : 24;
 	unsigned int type : 8;
 	unsigned int mod_id : 32;
 };
 
-typedef union
-{
+typedef union {
 	raw_game_id raw;
 	unsigned long long bits;
 } game_id;
-#pragma pack( pop )
+#pragma pack(pop)
 
 #include "interfaces/apps.hpp"
 #include "interfaces/user.hpp"
@@ -50,24 +46,27 @@ typedef union
 #include "interfaces/client.hpp"
 #include "interfaces/ugc.hpp"
 
-namespace steam
-{
-	class callbacks
-	{
+namespace steam {
+	class callbacks {
 	public:
-		class base
-		{
+		class base {
 		public:
-			base() : flags_(0), callback_(0)
-			{
-			}
+			base()
+				: flags_(0)
+				, callback_(0)
+			{}
 
 			virtual void run(void* pv_param) = 0;
 			virtual void run(void* pv_param, bool failure, uint64_t handle) = 0;
 			virtual int get_callback_size_bytes() = 0;
 
-			int get_i_callback() const { return callback_; }
-			void set_i_callback(const int i_callback) { callback_ = i_callback; }
+			int get_i_callback() const {
+				return callback_;
+			}
+
+			void set_i_callback(const int i_callback) {
+				callback_ = i_callback;
+			}
 
 		protected:
 			~base() = default;
@@ -76,8 +75,7 @@ namespace steam
 			int callback_;
 		};
 
-		struct result final
-		{
+		struct result final {
 			void* data{};
 			int size{};
 			int type{};

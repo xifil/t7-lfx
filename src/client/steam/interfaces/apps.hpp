@@ -1,9 +1,7 @@
 #pragma once
 
-namespace steam
-{
-	class apps
-	{
+namespace steam {
+	class apps {
 	public:
 		~apps() = default;
 
@@ -18,8 +16,7 @@ namespace steam
 		virtual unsigned int GetEarliestPurchaseUnixTime(unsigned int nAppID);
 		virtual bool BIsSubscribedFromFreeWeekend();
 		virtual int GetDLCCount();
-		virtual bool BGetDLCDataByIndex(int iDLC, unsigned int* pAppID, bool* pbAvailable, char* pchName,
-		                                int cchNameBufferSize);
+		virtual bool BGetDLCDataByIndex(int iDLC, unsigned int* pAppID, bool* pbAvailable, char* pchName, int cchNameBufferSize);
 		virtual void InstallDLC(unsigned int nAppID);
 		virtual void UninstallDLC(unsigned int nAppID);
 		virtual void RequestAppProofOfPurchaseKey(unsigned int nAppID);

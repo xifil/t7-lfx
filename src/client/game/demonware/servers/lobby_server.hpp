@@ -4,16 +4,13 @@
 #include "service_server.hpp"
 #include "../service.hpp"
 
-namespace demonware
-{
-	class lobby_server : public tcp_server, service_server
-	{
+namespace demonware {
+	class lobby_server : public tcp_server, service_server {
 	public:
 		lobby_server(std::string name);
 
 		template <typename T>
-		void register_service()
-		{
+		void register_service() {
 			static_assert(std::is_base_of<service, T>::value, "service must inherit from service");
 
 			auto service = std::make_unique<T>();

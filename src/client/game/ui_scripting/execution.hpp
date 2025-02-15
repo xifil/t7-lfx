@@ -3,8 +3,7 @@
 #include "types.hpp"
 #include "script_value.hpp"
 
-namespace ui_scripting
-{
+namespace ui_scripting {
 	void push_value(const script_value& value);
 	void push_value(const game::hks::HksObject& value);
 

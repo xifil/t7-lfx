@@ -1,11 +1,9 @@
 #pragma once
 #pragma comment (lib, "dwmapi.lib")
 
-class window
-{
+class window {
 public:
-	window(const std::string& title, int width, int height,
-		std::function<std::optional<LRESULT>(window*, UINT, WPARAM, LPARAM)> callback,
+	window(const std::string& title, int width, int height, std::function<std::optional<LRESULT>(window*, UINT, WPARAM, LPARAM)> callback,
 		long flags = (WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX)));
 
 	virtual ~window();

@@ -2,13 +2,11 @@
 
 #include <utils/nt.hpp>
 
-namespace steam_proxy
-{
+namespace steam_proxy {
 	const utils::nt::library& get_overlay_module();
 	const char* get_player_name();
 
-	struct subscribed_item
-	{
+	struct subscribed_item {
 		bool available;
 		std::string path;
 		uint32_t state;

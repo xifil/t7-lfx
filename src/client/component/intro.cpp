@@ -4,17 +4,12 @@
 
 #include <utils/hook.hpp>
 
-namespace intro
-{
-	namespace
-	{
+namespace intro {
+	namespace {
 		utils::hook::detour cinematic_start_playback_hook;
 
-		void ccc(const char* name, const char* key, const unsigned int playback_flags, const float volume,
-		         void* callback_info, const int id)
-		{
-			if (name == "BO3_Global_Logo_LogoSequence"s)
-			{
+		void ccc(const char* name, const char* key, const unsigned int playback_flags, const float volume, void* callback_info, const int id) {
+			if (name == "BO3_Global_Logo_LogoSequence"s) {
 				return;
 			}
 
@@ -22,11 +17,9 @@ namespace intro
 		}
 	}
 
-	class component final : public client_component
-	{
+	class component final : public client_component {
 	public:
-		void post_unpack() override
-		{
+		void post_unpack() override {
 			cinematic_start_playback_hook.create(game::Cinematic_StartPlayback, ccc);
 		}
 	};

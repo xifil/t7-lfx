@@ -11,59 +11,45 @@
 
 #include <utils/hook.hpp>
 
-namespace dedicated
-{
-	namespace
-	{
+namespace dedicated {
+	namespace {
 		const game::dvar_t* sv_lan_only;
 
-		void sv_con_tell_f_stub(game::client_s* cl_0, game::svscmd_type type, [[maybe_unused]] const char* fmt,
-		                        [[maybe_unused]] int c, char* text)
-		{
+		void sv_con_tell_f_stub(game::client_s* cl_0, game::svscmd_type type, [[maybe_unused]] const char* fmt, [[maybe_unused]] int c, char* text) {
 			game::SV_SendServerCommand(cl_0, type, "%c \"GAME_SERVER\x15: %s\"", 79, text);
 		}
 
-		void send_heartbeat_packet()
-		{
-			if (sv_lan_only->current.value.enabled)
-			{
+		void send_heartbeat_packet() {
+			if (sv_lan_only->current.value.enabled) {
 				return;
 			}
 
 			game::netadr_t target{};
-			if (server_list::get_master_server(target))
-			{
+			if (server_list::get_master_server(target)) {
 				network::send(target, "heartbeat", "T7");
 			}
 		}
 	}
 
-	void send_heartbeat()
-	{
-		if (!game::is_server())
-		{
+	void send_heartbeat() {
+		if (!game::is_server()) {
 			return;
 		}
 
 		scheduler::once(send_heartbeat_packet, scheduler::pipeline::main, 5s);
 	}
 
-	void trigger_map_rotation()
-	{
-		scheduler::once([]
-		{
-			if (!game::get_dvar_string("sv_maprotation").empty())
-			{
+	void trigger_map_rotation() {
+		scheduler::once([] {
+			if (!game::get_dvar_string("sv_maprotation").empty()) {
 				game::Cbuf_AddText(0, "map_rotate\n");
 				send_heartbeat();
 			}
 		}, scheduler::pipeline::main, 1s);
 	}
 
-	struct component final : server_component
-	{
-		void post_unpack() override
-		{
+	struct component final : server_component {
+		void post_unpack() override {
 			// Ignore "bad stats"
 			//utils::hook::set<uint8_t>(0x14052D523_g, 0xEB);
 			//utils::hook::nop(0x14052D4E4_g, 2);

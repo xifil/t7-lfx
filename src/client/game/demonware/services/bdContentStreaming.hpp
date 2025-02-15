@@ -1,9 +1,7 @@
 #pragma once
 
-namespace demonware
-{
-	class bdContentStreaming final : public service
-	{
+namespace demonware {
+	class bdContentStreaming final : public service {
 	public:
 		bdContentStreaming();
 

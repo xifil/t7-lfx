@@ -4,10 +4,8 @@
 
 #include "component/ui_scripting.hpp"
 
-namespace ui_scripting
-{
-	class lightuserdata
-	{
+namespace ui_scripting {
+	class lightuserdata {
 	public:
 		lightuserdata(void*);
 		void* ptr;
@@ -15,8 +13,7 @@ namespace ui_scripting
 
 	class userdata_value;
 
-	class userdata
-	{
+	class userdata {
 	public:
 		userdata(void*);
 
@@ -42,8 +39,7 @@ namespace ui_scripting
 		int ref{};
 	};
 
-	class userdata_value : public script_value
-	{
+	class userdata_value : public script_value {
 	public:
 		userdata_value(const userdata& table, const script_value& key);
 		void operator=(const script_value& value);
@@ -55,8 +51,7 @@ namespace ui_scripting
 
 	class table_value;
 
-	class table
-	{
+	class table {
 	public:
 		table();
 		table(game::hks::HashTable* ptr_);
@@ -83,8 +78,7 @@ namespace ui_scripting
 		int ref{};
 	};
 
-	class table_value : public script_value
-	{
+	class table_value : public script_value {
 	public:
 		table_value(const table& table, const script_value& key);
 		void operator=(const script_value& value);
@@ -97,15 +91,13 @@ namespace ui_scripting
 	};
 
 
-	class function
-	{
+	class function {
 	public:
 		function(game::hks::lua_function);
 		function(game::hks::cclosure*, game::hks::HksObjectType);
 
 		template <typename F>
-		function(F f)
-		{
+		function(F f) {
 			this->ptr = ui_scripting::convert_function(f);
 			this->type = game::hks::TCFUNCTION;
 		}
@@ -123,8 +115,7 @@ namespace ui_scripting
 		arguments operator()(const arguments& arguments) const;
 
 		template<class ...T>
-		arguments operator()(T... arguments) const
-		{
+		arguments operator()(T... arguments) const {
 			return this->call({ arguments... });
 		}
 

@@ -1,23 +1,21 @@
 #include <std_include.hpp>
 #include "../services.hpp"
 
-namespace demonware
-{
-	bdCounter::bdCounter() : service(23, "bdCounter")
+namespace demonware {
+	bdCounter::bdCounter()
+		: service(23, "bdCounter")
 	{
-		this->register_task(1, &bdCounter::incrementCounters);
-		this->register_task(2, &bdCounter::getCounterTotals);
+		this->register_task(1, &bdCounter::increment_counters);
+		this->register_task(2, &bdCounter::get_counter_totals);
 	}
 
-	void bdCounter::incrementCounters(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdCounter::increment_counters(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();
 	}
 
-	void bdCounter::getCounterTotals(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdCounter::get_counter_totals(service_server* server, byte_buffer* /*buffer*/) const {
 		// TODO:
 		auto reply = server->create_reply(this->task_id());
 		reply.send();

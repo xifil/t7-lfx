@@ -1,9 +1,7 @@
 #pragma once
 
-namespace command
-{
-	class params
-	{
+namespace command {
+	class params {
 	public:
 		params();
 		params(const std::string& text);
@@ -19,18 +17,16 @@ namespace command
 		[[nodiscard]] const char* get(int index) const;
 		[[nodiscard]] std::string join(int index) const;
 
-		[[nodiscard]] const char* operator[](const int index) const
-		{
+		[[nodiscard]] const char* operator[](const int index) const {
 			return this->get(index); //
 		}
 
 	private:
-		bool needs_end_{false};
+		bool needs_end_{ false };
 		int nesting_;
 	};
 
-	class params_sv
-	{
+	class params_sv {
 	public:
 		params_sv();
 		params_sv(const std::string& text);
@@ -46,13 +42,12 @@ namespace command
 		[[nodiscard]] const char* get(int index) const;
 		[[nodiscard]] std::string join(int index) const;
 
-		[[nodiscard]] const char* operator[](const int index) const
-		{
+		[[nodiscard]] const char* operator[](const int index) const {
 			return this->get(index); //
 		}
 
 	private:
-		bool needs_end_{false};
+		bool needs_end_{ false };
 		int nesting_;
 	};
 

@@ -1,13 +1,11 @@
 #pragma once
 
-namespace demonware
-{
-	class bdPublisherVariables final : public service
-	{
+namespace demonware {
+	class bdPublisherVariables final : public service {
 	public:
 		bdPublisherVariables();
 
 	private:
-		void retrievePublisherVariables(service_server* server, byte_buffer* buffer) const;
+		void retrieve_publisher_variables(service_server* server, byte_buffer* buffer) const;
 	};
 }

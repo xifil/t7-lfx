@@ -1,13 +1,11 @@
 #pragma once
 #include <cstdint>
 
-namespace steam
-{
+namespace steam {
 	using HSteamPipe = uint64_t;
 	using HSteamUser = uint64_t;
 
-	class client
-	{
+	class client {
 	public:
 		~client() = default;
 

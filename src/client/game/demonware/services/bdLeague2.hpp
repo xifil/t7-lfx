@@ -1,16 +1,14 @@
 #pragma once
 
-namespace demonware
-{
-	class bdLeague2 final : public service
-	{
+namespace demonware {
+	class bdLeague2 final : public service {
 	public:
 		bdLeague2();
 
 	private:
-		void writeStats(service_server* server, byte_buffer* buffer) const;
-		void readStatsByTeamID(service_server* server, byte_buffer* buffer) const;
-		void readStatsByRank(service_server* server, byte_buffer* buffer) const;
-		void readStatsByPivot(service_server* server, byte_buffer* buffer) const;
+		void write_stats(service_server* server, byte_buffer* buffer) const;
+		void read_stats_by_team_id(service_server* server, byte_buffer* buffer) const;
+		void read_stats_by_rank(service_server* server, byte_buffer* buffer) const;
+		void read_stats_by_pivot(service_server* server, byte_buffer* buffer) const;
 	};
 }

@@ -2,9 +2,9 @@
 #include "../services.hpp"
 #include "steam/steam.hpp"
 
-namespace demonware
-{
-	bdMatchMaking::bdMatchMaking() : service(21, "bdMatchMaking")
+namespace demonware {
+	bdMatchMaking::bdMatchMaking()
+		: service(21, "bdMatchMaking")
 	{
 		this->register_task(1, &bdMatchMaking::create_session);
 		this->register_task(2, &bdMatchMaking::update_session);
@@ -13,8 +13,7 @@ namespace demonware
 		this->register_task(10, &bdMatchMaking::get_performance);
 	}
 
-	void bdMatchMaking::create_session(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdMatchMaking::create_session(service_server* server, byte_buffer* /*buffer*/) const {
 		auto id = std::make_unique<bdSessionID>();
 		id->session_id = steam::SteamUser()->GetSteamID().bits;
 
@@ -23,8 +22,7 @@ namespace demonware
 		reply.send();
 	}
 
-	void bdMatchMaking::update_session(service_server* server, byte_buffer* buffer) const
-	{
+	void bdMatchMaking::update_session(service_server* server, byte_buffer* buffer) const {
 		/*MatchMakingInfo mmInfo;
 		mmInfo.session_id.deserialize(buffer);
 		mmInfo.deserialize(buffer);
@@ -41,8 +39,7 @@ namespace demonware
 		reply.send();
 	}
 
-	void bdMatchMaking::delete_session(service_server* server, byte_buffer* buffer) const
-	{
+	void bdMatchMaking::delete_session(service_server* server, byte_buffer* buffer) const {
 		bdSessionID id;
 		id.deserialize(buffer);
 
@@ -53,8 +50,7 @@ namespace demonware
 		reply.send();
 	}
 
-	void bdMatchMaking::get_performance(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdMatchMaking::get_performance(service_server* server, byte_buffer* /*buffer*/) const {
 		auto result = std::make_unique<bdPerformanceValue>();
 		result->user_id = steam::SteamUser()->GetSteamID().bits;
 		result->performance = 10;
@@ -64,14 +60,14 @@ namespace demonware
 		reply.send();
 	}
 
-	void bdMatchMaking::find_sessions(service_server* server, byte_buffer* /*buffer*/) const
-	{
+	void bdMatchMaking::find_sessions(service_server* server, byte_buffer* /*buffer*/) const {
 		auto reply = server->create_reply(this->task_id());
 
-		//for (auto& session : sessions)
-		{
-			//reply.add(session.second);
+		/*
+		for (auto& session : sessions) {
+			reply.add(session.second);
 		}
+		*/
 
 		reply.send();
 	}

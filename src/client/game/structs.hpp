@@ -4,12 +4,10 @@
 #define SUB_PROTOCOL 1
 
 #ifdef __cplusplus
-namespace game
-{
+namespace game {
 #endif
 
-	enum ControllerIndex_t
-	{
+	enum ControllerIndex_t {
 		INVALID_CONTROLLER_PORT = -1,
 		CONTROLLER_INDEX_FIRST = 0x0,
 		CONTROLLER_INDEX_0 = 0x0,
@@ -19,8 +17,7 @@ namespace game
 		CONTROLLER_INDEX_COUNT = 0x4,
 	};
 
-	enum LocalClientNum_t
-	{
+	enum LocalClientNum_t {
 		INVALID_LOCAL_CLIENT = -1,
 		LOCAL_CLIENT_0 = 0x0,
 		LOCAL_CLIENT_FIRST = 0x0,
@@ -31,8 +28,7 @@ namespace game
 		LOCAL_CLIENT_COUNT = 0x4,
 	};
 
-	enum eGameModes
-	{
+	enum eGameModes {
 		MODE_GAME_MATCHMAKING_PLAYLIST = 0x0,
 		MODE_GAME_MATCHMAKING_MANUAL = 0x1,
 		MODE_GAME_DEFAULT = 0x2,
@@ -42,8 +38,7 @@ namespace game
 		MODE_GAME_INVALID = 0x5,
 	};
 
-	enum eModes
-	{
+	enum eModes {
 		MODE_ZOMBIES = 0x0,
 		MODE_MULTIPLAYER = 0x1,
 		MODE_CAMPAIGN = 0x2,
@@ -52,8 +47,7 @@ namespace game
 		MODE_FIRST = 0x0,
 	};
 
-	enum eNetworkModes
-	{
+	enum eNetworkModes {
 		MODE_NETWORK_OFFLINE = 0x0,
 		MODE_NETWORK_SYSTEMLINK = 0x1,
 		MODE_NETWORK_ONLINE = 0x2,
@@ -61,15 +55,13 @@ namespace game
 		MODE_NETWORK_INVALID = 0x3,
 	};
 
-	enum MapPreload
-	{
+	enum MapPreload {
 		MAP_PRELOAD_NONE = 0x0,
 		MAP_PRELOAD_FRONTEND = 0x1,
 		MAP_PRELOAD_IN_GAME = 0x2,
 	};
 
-	enum bdLobbyErrorCode
-	{
+	enum bdLobbyErrorCode {
 		BD_NO_ERROR = 0x0,
 		BD_TOO_MANY_TASKS = 0x1,
 		BD_NOT_CONNECTED = 0x2,
@@ -408,16 +400,14 @@ namespace game
 		BD_MAX_ERROR_CODE = 0x27E2,
 	};
 
-	enum bdNATType : uint8_t
-	{
+	enum bdNATType : uint8_t {
 		BD_NAT_UNKNOWN = 0x0,
 		BD_NAT_OPEN = 0x1,
 		BD_NAT_MODERATE = 0x2,
 		BD_NAT_STRICT = 0x3,
 	};
 
-	enum itemTextStyle
-	{
+	enum itemTextStyle {
 		ITEM_TEXTSTYLE_NORMAL = 0,
 		ITEM_TEXTSTYLE_SHADOWED = 3,
 		ITEM_TEXTSTYLE_SHADOWEDMORE = 6,
@@ -427,8 +417,7 @@ namespace game
 		ITEM_TEXTSTYLE_MONOSPACESHADOWED = 132,
 	};
 
-	enum errorParm
-	{
+	enum errorParm {
 		ERR_FATAL = 0,
 		ERR_DROP = 1,
 		ERR_SERVERDISCONNECT = 2,
@@ -439,8 +428,7 @@ namespace game
 		ERR_MAPLOADERRORSUMMARY = 7,
 	};
 
-	enum errorCode
-	{
+	enum errorCode {
 		ERROR_NONE = 0x0,
 		ERROR_FATAL = 0x1,
 		ERROR_DROP = 0x2,
@@ -456,8 +444,7 @@ namespace game
 		ERROR_SOFTRESTART_KEEPDW = 0x800,
 	};
 
-	enum XAssetType
-	{
+	enum XAssetType {
 		ASSET_TYPE_PHYSPRESET = 0x0,
 		ASSET_TYPE_PHYSCONSTRAINTS = 0x1,
 		ASSET_TYPE_DESTRUCTIBLEDEF = 0x2,
@@ -569,21 +556,18 @@ namespace game
 		ASSET_TYPE_FULL_COUNT = 0x6C,
 	};
 
-	struct RawFile
-	{
+	struct RawFile {
 		const char* name;
 		int len;
 		const char* buffer;
 	};
 
-	struct XZoneBuffer
-	{
+	struct XZoneBuffer {
 		const void* data;
 		size_t dataSize;
 	};
 
-	struct XZoneInfo
-	{
+	struct XZoneInfo {
 		const char* name;
 		int allocFlags;
 		int freeFlags;
@@ -594,8 +578,7 @@ namespace game
 
 	typedef void (*xcommand_t)();
 
-	struct cmd_function_s
-	{
+	struct cmd_function_s {
 		cmd_function_s* next;
 		const char* name;
 		const char* autoCompleteDir;
@@ -604,8 +587,7 @@ namespace game
 		int autoComplete;
 	};
 
-	struct CmdArgs
-	{
+	struct CmdArgs {
 		int nesting;
 		int localClientNum[8];
 		int controllerIndex[8];
@@ -619,14 +601,12 @@ namespace game
 		int totalUsedTextPool;
 	};
 
-	struct va_info_t
-	{
+	struct va_info_t {
 		char va_string[4][1024];
 		int index;
 	};
 
-	struct TLSData
-	{
+	struct TLSData {
 		va_info_t* vaInfo;
 		jmp_buf* errorJmpBuf;
 		void* traceInfo;
@@ -634,8 +614,7 @@ namespace game
 		void* errorData;
 	};
 
-	enum connstate_t
-	{
+	enum connstate_t {
 		CA_DISCONNECTED = 0x0,
 		CA_CINEMATIC = 0x1,
 		CA_UICINEMATIC = 0x2,
@@ -650,8 +629,7 @@ namespace game
 		CA_ACTIVE = 0xB,
 	};
 
-	struct clientUIActive_t
-	{
+	struct clientUIActive_t {
 		int flags;
 		int keyCatchers;
 		connstate_t connectionState;
@@ -660,8 +638,7 @@ namespace game
 
 	static_assert(sizeof(clientUIActive_t) == 0x1078);
 
-	struct clientActive_t
-	{
+	struct clientActive_t {
 		char __pad0[0xB8C8];
 		float viewangles[3];
 		char __pad1[0x18C15C];
@@ -673,8 +650,7 @@ namespace game
 
 	typedef uint32_t dvarStrHash_t;
 
-	enum dvarType_t
-	{
+	enum dvarType_t {
 		DVAR_TYPE_INVALID = 0x0,
 		DVAR_TYPE_BOOL = 0x1,
 		DVAR_TYPE_FLOAT = 0x2,
@@ -694,8 +670,7 @@ namespace game
 		DVAR_TYPE_COUNT = 0x10,
 	};
 
-	enum dvarFlags_e
-	{
+	enum dvarFlags_e {
 		DVAR_NONE = 0,
 		DVAR_ARCHIVE = 1 << 0,
 		DVAR_USERINFO = 1 << 1,
@@ -714,8 +689,7 @@ namespace game
 
 	typedef float vec_t;
 
-	union vec4_t
-	{
+	union vec4_t {
 		vec_t v[4];
 		//vec4_t::$E8049E02A67BEF20C2B48C1E90A72E45 _anon_0;
 		//vec4_t::$65A5F67E76558B5B186374890F5F7384 _anon_1;
@@ -724,10 +698,8 @@ namespace game
 
 	struct dvar_t;
 
-	struct DvarValue
-	{
-		union
-		{
+	struct DvarValue {
+		union {
 			bool enabled;
 			int integer;
 			uint32_t unsignedInt;
@@ -743,47 +715,39 @@ namespace game
 		uint64_t encryptedValue;
 	};
 
-	union DvarLimits
-	{
-		struct
-		{
+	union DvarLimits {
+		struct {
 			int stringCount;
 			const char** strings;
 		} enumeration;
 
-		struct
-		{
+		struct {
 			int min;
 			int max;
 		} integer;
 
-		struct
-		{
+		struct {
 			int64_t min;
 			int64_t max;
 		} integer64;
 
-		struct
-		{
+		struct {
 			uint64_t min;
 			uint64_t max;
 		} unsignedInt64;
 
-		struct
-		{
+		struct {
 			float min;
 			float max;
 		} value;
 
-		struct
-		{
+		struct {
 			vec_t min;
 			vec_t max;
 		} vector;
 	};
 
-	struct dvar_t
-	{
+	struct dvar_t {
 		dvarStrHash_t name;
 		const char* debugName;
 		const char* description;
@@ -797,16 +761,14 @@ namespace game
 		dvar_t* hashNext;
 	};
 
-	struct netipv4_t
-	{
+	struct netipv4_t {
 		byte a;
 		byte b;
 		byte c;
 		byte d;
 	};
 
-	enum netadrtype_t
-	{
+	enum netadrtype_t {
 		NA_BOT = 0x0,
 		NA_BAD = 0x1,
 		NA_LOOPBACK = 0x2,
@@ -814,8 +776,7 @@ namespace game
 		NA_IP = 0x4,
 	};
 
-	enum netsrc_t
-	{
+	enum netsrc_t {
 		NS_NULL = -1,
 		NS_CLIENT1 = 0x0,
 		NS_CLIENT2 = 0x1,
@@ -826,10 +787,8 @@ namespace game
 		NS_PACKET = 0x5,
 	};
 
-	struct netadr_t
-	{
-		union
-		{
+	struct netadr_t {
+		union {
 			netipv4_t ipv4;
 			uint32_t addr;
 		};
@@ -839,20 +798,17 @@ namespace game
 		netsrc_t localNetID;
 	};
 
-	struct XNADDR
-	{
+	struct XNADDR {
 		byte addrBuff[37];
 	};
 
-	struct bdSecurityID
-	{
+	struct bdSecurityID {
 		byte ab[8];
 	};
 
 	typedef bdSecurityID XNKID;
 
-	struct bdSecurityKey
-	{
+	struct bdSecurityKey {
 		byte ab[16];
 	};
 
@@ -860,14 +816,12 @@ namespace game
 
 	typedef uint64_t XUID;
 
-	struct SerializedAdr
-	{
+	struct SerializedAdr {
 		byte valid;
 		byte addrBuff[37];
 	};
 
-	struct XSESSION_INFO
-	{
+	struct XSESSION_INFO {
 		XNKID sessionID;
 		XNADDR hostAddress;
 		XNKEY keyExchangeKey;
@@ -875,8 +829,7 @@ namespace game
 
 	typedef int qboolean;
 
-	enum PacketModeList
-	{
+	enum PacketModeList {
 		PACKETDATA_FIRST = 0x0,
 		PACKETDATA_UNDEFINED = 0x0,
 		PACKETDATA_HEADER = 0x1,
@@ -901,14 +854,12 @@ namespace game
 		NUM_PACKETDATA_MODES = 0x14,
 	};
 
-	struct PacketMode
-	{
+	struct PacketMode {
 		unsigned int start;
 		PacketModeList mode;
 	};
 
-	struct msg_t
-	{
+	struct msg_t {
 		qboolean overflowed;
 		qboolean readOnly;
 		byte* data;
@@ -926,8 +877,7 @@ namespace game
 
 	typedef void* bdCommonAddrRef;
 
-	struct HostInfo
-	{
+	struct HostInfo {
 		uint64_t xuid;
 		char name[32];
 		netadr_t netAdr;
@@ -937,8 +887,7 @@ namespace game
 		uint32_t serverLocation;
 	};
 
-	enum LobbyType
-	{
+	enum LobbyType {
 		LOBBY_TYPE_INVALID = -1,
 		LOBBY_TYPE_PRIVATE = 0x0,
 		LOBBY_TYPE_GAME = 0x1,
@@ -949,16 +898,14 @@ namespace game
 		LOBBY_TYPE_AUTO = 0x3,
 	};
 
-	enum LobbyClientType
-	{
+	enum LobbyClientType {
 		LOBBY_CLIENT_TYPE_INVALID = -1,
 		LOBBY_CLIENT_TYPE_ALL = 0x0,
 		LOBBY_CLIENT_TYPE_LOCAL = 0x1,
 		LOBBY_CLIENT_TYPE_REMOTE = 0x2,
 	};
 
-	enum LobbyNetworkMode
-	{
+	enum LobbyNetworkMode {
 		LOBBY_NETWORKMODE_INVALID = -1,
 		LOBBY_NETWORKMODE_LOCAL = 0x0,
 		LOBBY_NETWORKMODE_LAN = 0x1,
@@ -966,8 +913,7 @@ namespace game
 		LOBBY_NETWORKMODE_COUNT = 0x3,
 	};
 
-	enum LobbyMainMode
-	{
+	enum LobbyMainMode {
 		LOBBY_MAINMODE_INVALID = -1,
 		LOBBY_MAINMODE_CP = 0x0,
 		LOBBY_MAINMODE_MP = 0x1,
@@ -975,14 +921,12 @@ namespace game
 		LOBBY_MAINMODE_COUNT = 0x3,
 	};
 
-	struct LobbyParams
-	{
+	struct LobbyParams {
 		LobbyNetworkMode networkMode;
 		LobbyMainMode mainMode;
 	};
 
-	enum JoinType
-	{
+	enum JoinType {
 		JOIN_TYPE_NORMAL = 0x0,
 		JOIN_TYPE_PLAYLIST = 0x1,
 		JOIN_TYPE_FRIEND = 0x2,
@@ -991,8 +935,7 @@ namespace game
 		JOIN_TYPE_COUNT = 0x5,
 	};
 
-	struct JoinHost
-	{
+	struct JoinHost {
 		HostInfo info;
 		LobbyType lobbyType;
 		LobbyParams lobbyParams;
@@ -1001,8 +944,7 @@ namespace game
 		int retryCount;
 	};
 
-	enum JoinSourceState
-	{
+	enum JoinSourceState {
 		JOIN_SOURCE_STATE_IDLE = 0x0,
 		JOIN_SOURCE_STATE_CONNECT_TO_NEXT_HOST = 0x1,
 		JOIN_SOURCE_STATE_ASSOCIATING = 0x2,
@@ -1015,8 +957,7 @@ namespace game
 		JOIN_SOURCE_STATE_COUNT = 0x9,
 	};
 
-	enum JoinResult
-	{
+	enum JoinResult {
 		JOIN_RESULT_INVALID = 0x0,
 		JOIN_RESULT_SUCCESS = 0x1,
 		JOIN_RESULT_CONNECT_TO_HOST_FAILURE = 0x2,
@@ -1052,8 +993,7 @@ namespace game
 
 	typedef void (*joinCompleteCallback)(int, JoinResult);
 
-	struct AgreementStatus
-	{
+	struct AgreementStatus {
 		XUID xuid;
 		char name[32];
 		bool responded;
@@ -1062,8 +1002,7 @@ namespace game
 		int responseTime;
 	};
 
-	struct Agreement
-	{
+	struct Agreement {
 		int nonce;
 		AgreementStatus status[18];
 		int requestCount;
@@ -1071,8 +1010,7 @@ namespace game
 		int agreeCount;
 	};
 
-	struct Join
-	{
+	struct Join {
 		JoinSourceState state;
 		int actionId;
 		int startTime;
@@ -1092,8 +1030,7 @@ namespace game
 		JoinResult joinResult;
 	};
 
-	struct ServerInfo
-	{
+	struct ServerInfo {
 		uint16_t m_usConnectionPort;
 		uint16_t m_usQueryPort;
 		uint32_t m_unIP;
@@ -1119,8 +1056,7 @@ namespace game
 	};
 
 #ifdef __cplusplus
-	namespace hks
-	{
+	namespace hks {
 		struct lua_State;
 		struct HashTable;
 		struct StringTable;
@@ -1143,38 +1079,32 @@ namespace game
 		typedef void* (*lua_Alloc)(void*, void*, size_t, size_t);
 		typedef hksInt32 (*lua_CFunction)(lua_State*);
 
-		struct GenericChunkHeader
-		{
+		struct GenericChunkHeader {
 			hksSize m_flags;
 		};
 
-		struct ChunkHeader : GenericChunkHeader
-		{
+		struct ChunkHeader : GenericChunkHeader {
 			ChunkHeader* m_next;
 		};
 
-		struct ChunkList
-		{
+		struct ChunkList {
 			ChunkHeader m_head;
 		};
 
-		struct UserData : ChunkHeader
-		{
+		struct UserData : ChunkHeader {
 			unsigned __int64 m_envAndSizeOffsetHighBits;
 			unsigned __int64 m_metaAndSizeOffsetLowBits;
 			char m_data[8];
 		};
 
-		struct InternString
-		{
+		struct InternString {
 			unsigned __int64 m_flags;
 			unsigned __int64 m_lengthbits;
 			unsigned int m_hash;
 			char m_data[30];
 		};
 
-		union HksValue
-		{
+		union HksValue {
 			cclosure* cClosure;
 			void* closure;
 			UserData* userData;
@@ -1188,8 +1118,7 @@ namespace game
 			bool boolean;
 		};
 
-		enum HksObjectType
-		{
+		enum HksObjectType {
 			TANY = -1,
 			TNONE = -1,
 			TNIL = 0x0,
@@ -1199,7 +1128,7 @@ namespace game
 			TSTRING = 0x4,
 			TTABLE = 0x5,
 			TFUNCTION = 0x6,
-			// idk
+			// unk6
 			TUSERDATA = 0x7,
 			TTHREAD = 0x8,
 			TIFUNCTION = 0x9,
@@ -1211,19 +1140,16 @@ namespace game
 			NUM_TYPE_OBJECTS = 0xE,
 		};
 
-		struct HksObject
-		{
+		struct HksObject {
 			HksObjectType t;
 			HksValue v;
 		};
 
-		const struct hksInstruction
-		{
+		const struct hksInstruction {
 			unsigned int code;
 		};
 
-		struct ActivationRecord
-		{
+		struct ActivationRecord {
 			HksObject* m_base;
 			const hksInstruction* m_returnAddress;
 			__int16 m_tailCallDepth;
@@ -1231,8 +1157,7 @@ namespace game
 			int m_numExpectedReturns;
 		};
 
-		struct CallStack
-		{
+		struct CallStack {
 			ActivationRecord* m_records;
 			ActivationRecord* m_lastrecord;
 			ActivationRecord* m_current;
@@ -1241,37 +1166,32 @@ namespace game
 			int m_hook_level;
 		};
 
-		struct ApiStack
-		{
+		struct ApiStack {
 			HksObject* top;
 			HksObject* base;
 			HksObject* alloc_top;
 			HksObject* bottom;
 		};
 
-		struct UpValue : ChunkHeader
-		{
+		struct UpValue : ChunkHeader {
 			HksObject m_storage;
 			HksObject* loc;
 			UpValue* m_next;
 		};
 
-		struct CallSite
-		{
+		struct CallSite {
 			_SETJMP_FLOAT128 m_jumpBuffer[16];
 			CallSite* m_prev;
 		};
 
-		enum Status
-		{
+		enum Status {
 			NEW = 0x1,
 			RUNNING = 0x2,
 			YIELDED = 0x3,
 			DEAD_ERROR = 0x4,
 		};
 
-		enum HksError
-		{
+		enum HksError {
 			HKS_NO_ERROR = 0,
 			HKS_ERRSYNTAX = -4,
 			HKS_ERRFILE = -5,
@@ -1282,8 +1202,7 @@ namespace game
 			HKS_GC_YIELD = 1,
 		};
 
-		struct lua_Debug
-		{
+		struct lua_Debug {
 			int event;
 			const char* name;
 			const char* namewhat;
@@ -1302,22 +1221,18 @@ namespace game
 
 		using lua_function = int(__fastcall*)(lua_State*);
 
-		struct luaL_Reg
-		{
+		struct luaL_Reg {
 			const char* name;
 			lua_function function;
 		};
 
-		struct Node
-		{
+		struct Node {
 			HksObject m_key;
 			HksObject m_value;
 		};
 
-		struct StringPinner
-		{
-			struct Node
-			{
+		struct StringPinner {
+			struct Node {
 				InternString* m_strings[32];
 				Node* m_prev;
 			};
@@ -1329,20 +1244,17 @@ namespace game
 			Node* m_currentNode;
 		};
 
-		struct StringTable
-		{
+		struct StringTable {
 			InternString** m_data;
 			unsigned int m_count;
 			unsigned int m_mask;
 			StringPinner* m_pinnedStrings;
 		};
 
-		struct Metatable
-		{
+		struct Metatable {
 		};
 
-		struct HashTable : ChunkHeader
-		{
+		struct HashTable : ChunkHeader {
 			Metatable* m_meta;
 			unsigned int m_version;
 			unsigned int m_mask;
@@ -1352,8 +1264,7 @@ namespace game
 			Node* m_freeNode;
 		};
 
-		struct cclosure : ChunkHeader
-		{
+		struct cclosure : ChunkHeader {
 			lua_function m_function;
 			HashTable* m_env;
 			__int16 m_numUpvalues;
@@ -1362,15 +1273,13 @@ namespace game
 			HksObject m_upvalues[1];
 		};
 
-		enum HksCompilerSettings_BytecodeSharingFormat
-		{
+		enum HksCompilerSettings_BytecodeSharingFormat {
 			BYTECODE_DEFAULT = 0x0,
 			BYTECODE_INPLACE = 0x1,
 			BYTECODE_REFERENCED = 0x2,
 		};
 
-		enum HksCompilerSettings_IntLiteralOptions
-		{
+		enum HksCompilerSettings_IntLiteralOptions {
 			INT_LITERALS_NONE = 0x0,
 			INT_LITERALS_LUD = 0x1,
 			INT_LITERALS_32BIT = 0x1,
@@ -1379,8 +1288,7 @@ namespace game
 			INT_LITERALS_ALL = 0x3,
 		};
 
-		struct HksCompilerSettings
-		{
+		struct HksCompilerSettings {
 			int m_emitStructCode;
 			const char** m_stripNames;
 			int m_emitGlobalMemoization;
@@ -1390,15 +1298,13 @@ namespace game
 			int (*m_debugMap)(const char*, int);
 		};
 
-		enum HksBytecodeSharingMode : __int64
-		{
+		enum HksBytecodeSharingMode : __int64 {
 			HKS_BYTECODE_SHARING_OFF = 0,
 			HKS_BYTECODE_SHARING_ON = 1,
 			HKS_BYTECODE_SHARING_SECURE = 2
 		};
 
-		struct HksGcWeights
-		{
+		struct HksGcWeights {
 			int m_removeString;
 			int m_finalizeUserdataNoMM;
 			int m_finalizeUserdataGcMM;
@@ -1413,15 +1319,13 @@ namespace game
 			int m_sweepTraverse;
 		};
 
-		struct GarbageCollector_Stack
-		{
+		struct GarbageCollector_Stack {
 			void* m_storage;
 			unsigned int m_numEntries;
 			unsigned int m_numAllocated;
 		};
 
-		struct ProtoList
-		{
+		struct ProtoList {
 			void** m_protoList;
 			unsigned __int16 m_protoSize;
 			unsigned __int16 m_protoAllocSize;
@@ -1429,37 +1333,31 @@ namespace game
 
 		struct MemoryManager;
 
-		struct GarbageCollector
-		{
-			struct ResumeStack
-			{
+		struct GarbageCollector {
+			struct ResumeStack {
 				void* m_storage;
 				hksInt32 m_numEntries;
 				hksUint32 m_numAllocated;
 			};
 
-			struct GreyStack
-			{
+			struct GreyStack {
 				HksObject* m_storage;
 				hksSize m_numEntries;
 				hksSize m_numAllocated;
 			};
 
-			struct RemarkStack
-			{
+			struct RemarkStack {
 				HashTable** m_storage;
 				hksSize m_numAllocated;
 				hksSize m_numEntries;
 			};
 
-			struct WeakStack_Entry
-			{
+			struct WeakStack_Entry {
 				hksInt32 m_weakness;
 				HashTable* m_table;
 			};
 
-			struct WeakStack
-			{
+			struct WeakStack {
 				WeakStack_Entry* m_storage;
 				hksInt32 m_numEntries;
 				hksUint32 m_numAllocated;
@@ -1502,23 +1400,19 @@ namespace game
 			UserData* m_activeUD;
 		};
 
-		enum MemoryManager_ChunkColor
-		{
+		enum MemoryManager_ChunkColor {
 			RED = 0x0,
 			BLACK = 0x1,
 		};
 
-		enum Hks_DeleteCheckingMode
-		{
+		enum Hks_DeleteCheckingMode {
 			HKS_DELETE_CHECKING_OFF = 0x0,
 			HKS_DELETE_CHECKING_ACCURATE = 0x1,
 			HKS_DELETE_CHECKING_SAFE = 0x2,
 		};
 
-		struct MemoryManager
-		{
-			enum ChunkColor : __int32
-			{
+		struct MemoryManager {
+			enum ChunkColor : __int32 {
 				WHITE = 0x0,
 				BLACK = 0x1,
 			};
@@ -1534,20 +1428,17 @@ namespace game
 			lua_State* m_state;
 		};
 
-		struct StaticStringCache
-		{
+		struct StaticStringCache {
 			HksObject m_objects[41];
 		};
 
-		enum HksBytecodeEndianness
-		{
+		enum HksBytecodeEndianness {
 			HKS_BYTECODE_DEFAULT_ENDIAN = 0x0,
 			HKS_BYTECODE_BIG_ENDIAN = 0x1,
 			HKS_BYTECODE_LITTLE_ENDIAN = 0x2,
 		};
 
-		struct RuntimeProfileData_Stats
-		{
+		struct RuntimeProfileData_Stats {
 			unsigned __int64 hksTime;
 			unsigned __int64 callbackTime;
 			unsigned __int64 gcTime;
@@ -1564,8 +1455,7 @@ namespace game
 			unsigned int num_newtables;
 		};
 
-		struct RuntimeProfileData
-		{
+		struct RuntimeProfileData {
 			__int64 stackDepth;
 			__int64 callbackDepth;
 			unsigned __int64 lastTimer;
@@ -1581,8 +1471,7 @@ namespace game
 			lua_State* rootState;
 		};
 
-		struct HksGlobal
-		{
+		struct HksGlobal {
 			MemoryManager m_memory;
 			GarbageCollector m_collector;
 			StringTable m_stringTable;
@@ -1607,8 +1496,7 @@ namespace game
 			int padding2;
 		};
 
-		struct lua_State
-		{
+		struct lua_State {
 			ChunkHeader baseclass;
 			HksGlobal* m_global;
 			CallStack m_callStack;
@@ -1630,14 +1518,12 @@ namespace game
 
 	typedef uint32_t ScrVarCanonicalName_t;
 
-	enum svscmd_type
-	{
+	enum svscmd_type {
 		SV_CMD_CAN_IGNORE_0 = 0x0,
 		SV_CMD_RELIABLE_0 = 0x1,
 	};
 
-	enum
-	{
+	enum {
 		CS_FREE = 0x0,
 		CS_ZOMBIE = 0x1,
 		CS_RECONNECTING = 0x2,
@@ -1646,8 +1532,7 @@ namespace game
 		CS_ACTIVE = 0x5,
 	};
 
-	struct client_s
-	{
+	struct client_s {
 		int state;
 		char __pad0[0x28];
 		netadr_t address;
@@ -1676,8 +1561,7 @@ namespace game
 	static_assert(offsetof(game::client_s, bIsTestClient) == 0xBB360);
 #endif
 
-	struct client_s_cl : client_s
-	{
+	struct client_s_cl : client_s {
 		char __pad1_0[0x60];
 	};
 
@@ -1685,10 +1569,8 @@ namespace game
 	static_assert(sizeof(client_s_cl) == 0xE5170);
 #endif
 
-	union Weapon
-	{
-		struct
-		{
+	union Weapon {
+		struct {
 			uint64_t weaponIdx : 9;
 			uint64_t attachment1 : 6;
 			uint64_t attachment2 : 6;
@@ -1703,8 +1585,7 @@ namespace game
 		uint64_t weaponData;
 	};
 
-	union EntRefUnion
-	{
+	union EntRefUnion {
 		int32_t entnum;
 		uint32_t hudElemIndex;
 		uint32_t pathNodeIndex;
@@ -1714,8 +1595,7 @@ namespace game
 		uint64_t val;
 	};
 
-	struct scr_entref_t
-	{
+	struct scr_entref_t {
 		EntRefUnion u;
 		unsigned short classnum;
 		LocalClientNum_t client;
@@ -1723,34 +1603,29 @@ namespace game
 
 	static_assert(sizeof(scr_entref_t) == 0x10);
 
-	enum scriptInstance_t
-	{
+	enum scriptInstance_t {
 		SCRIPTINSTANCE_SERVER = 0x0,
 		SCRIPTINSTANCE_CLIENT = 0x1,
 		SCRIPT_INSTANCE_MAX = 0x2,
 	};
 
-	struct gclient_s
-	{
+	struct gclient_s {
 		char __pad0[0x8C];
 		float velocity[3];
 		char __pad1[59504];
 		char flags;
 	};
 
-	struct EntityState
-	{
+	struct EntityState {
 		int number;
 	}; // Incomplete
 
-	struct gentity_s
-	{
+	struct gentity_s {
 		EntityState s;
 		unsigned char __pad0[0x24C];
 		gclient_s* client;
 		unsigned char __pad1[0x17C];
-		struct
-		{
+		struct {
 			unsigned int notifyString;
 			unsigned int index;
 			unsigned char stoppable;
@@ -1764,14 +1639,12 @@ namespace game
 	static_assert(sizeof(gentity_s) == 0x4F8);
 #endif
 
-	enum workshop_type
-	{
+	enum workshop_type {
 		WORKSHOP_MOD = 0x1,
 		WORKSHOP_USERMAP = 0x2
 	};
 
-	struct workshop_data
-	{
+	struct workshop_data {
 		char title[100];
 		char folderName[32];
 		char publisherId[32];
@@ -1791,8 +1664,7 @@ namespace game
 	static_assert(sizeof(workshop_data) == 0x4C8);
 #endif
 
-	struct DDLMember
-	{
+	struct DDLMember {
 		const char* name;
 		int index;
 		void* parent;
@@ -1809,21 +1681,18 @@ namespace game
 		int permission;
 	};
 
-	struct DDLHash
-	{
+	struct DDLHash {
 		int hash;
 		int index;
 	};
 
-	struct DDLHashTable
-	{
+	struct DDLHashTable {
 		DDLHash* list;
 		int count;
 		int max;
 	};
 
-	struct DDLStruct
-	{
+	struct DDLStruct {
 		const char* name;
 		int bitSize;
 		int memberCount;
@@ -1832,16 +1701,14 @@ namespace game
 		DDLHashTable hashTableLower;
 	};
 
-	struct DDLEnum
-	{
+	struct DDLEnum {
 		const char* name;
 		int memberCount;
 		const char** members;
 		DDLHashTable hashTable;
 	};
 
-	struct DDLDef
-	{
+	struct DDLDef {
 		char* name;
 		uint16_t version;
 		unsigned int checksum;
@@ -1863,8 +1730,7 @@ namespace game
 	struct DDLContext;
 	typedef void (* DDLWriteCB)(DDLContext*, void*);
 
-	struct DDLContext
-	{
+	struct DDLContext {
 		void* buff;
 		int len;
 		const DDLDef* def;
@@ -1872,14 +1738,12 @@ namespace game
 		void* userData;
 	};
 
-	struct emblemChallengeLookup_t
-	{
+	struct emblemChallengeLookup_t {
 		__int16 challengeIndex;
 		unsigned char itemIndex;
 	};
 
-	enum CharacterItemType
-	{
+	enum CharacterItemType {
 		CHARACTER_ITEM_TYPE_BODY = 0x0,
 		CHARACTER_ITEM_TYPE_HELMET = 0x1,
 		CHARACTER_ITEM_TYPE_COUNT = 0x2,
@@ -1887,8 +1751,7 @@ namespace game
 
 	typedef __int16 BGEmblemBackgroundID;
 
-	union XAssetHeader
-	{
+	union XAssetHeader {
 		/*PhysPreset* physPreset;
 		PhysConstraints* physConstraints;
 		DestructibleDef* destructibleDef;
@@ -1990,8 +1853,7 @@ namespace game
 		RawFile* luaFile;
 	};
 
-	struct XAsset
-	{
+	struct XAsset {
 		XAssetType type;
 		XAssetHeader header;
 	};

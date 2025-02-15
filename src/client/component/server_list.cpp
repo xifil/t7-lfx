@@ -12,14 +12,11 @@
 #include "network.hpp"
 #include "scheduler.hpp"
 
-namespace server_list
-{
-	namespace
-	{
+namespace server_list {
+	namespace {
 		utils::hook::detour lua_server_info_to_table_hook;
 
-		struct state
-		{
+		struct state {
 			game::netadr_t address{};
 			bool requesting{ false };
 			std::chrono::high_resolution_clock::time_point query_start{};
@@ -30,11 +27,8 @@ namespace server_list
 
 		utils::concurrency::container<server_list> favorite_servers{};
 
-		void handle_server_list_response(const game::netadr_t& target,
-			const network::data_view& data, state& s)
-		{
-			if (!s.requesting || s.address != target)
-			{
+		void handle_server_list_response(const game::netadr_t& target, const network::data_view& data, state& s) {
+			if (!s.requesting || s.address != target) {
 				return;
 			}
 
@@ -43,27 +37,22 @@ namespace server_list
 
 			std::optional<size_t> start{};
 
-			for (size_t i = 0; i + 6 < data.size(); ++i)
-			{
-				if (data[i + 6] == '\\')
-				{
+			for (size_t i = 0; i + 6 < data.size(); ++i) {
+				if (data[i + 6] == '\\') {
 					start.emplace(i);
 					break;
 				}
 			}
 
-			if (!start.has_value())
-			{
+			if (!start.has_value()) {
 				callback(true, {});
 				return;
 			}
 
 			std::unordered_set<game::netadr_t> result{};
 
-			for (auto i = start.value(); i + 6 < data.size(); i += 7)
-			{
-				if (data[i + 6] != '\\')
-				{
+			for (auto i = start.value(); i + 6 < data.size(); i += 7) {
+				if (data[i + 6] != '\\') {
 					break;
 				}
 
@@ -80,29 +69,23 @@ namespace server_list
 			callback(true, result);
 		}
 
-		void lua_server_info_to_table_stub(game::hks::lua_State* state, game::ServerInfo server_info, int index)
-		{
+		void lua_server_info_to_table_stub(game::hks::lua_State* state, game::ServerInfo server_info, int index) {
 			lua_server_info_to_table_hook.invoke(state, server_info, index);
 
-			if (state)
-			{
+			if (state) {
 				const auto bot_count = atoi(game::Info_ValueForKey(server_info.tags, "bots"));
 				game::Lua_SetTableInt("botCount", bot_count, state);
 			}
 		}
 
-		std::string get_favorite_servers_file_path()
-		{
+		std::string get_favorite_servers_file_path() {
 			return "boiii_players/user/favorite_servers.txt";
 		}
 
-		void write_favorite_servers()
-		{
-			favorite_servers.access([](const std::unordered_set<game::netadr_t>& servers)
-			{
+		void write_favorite_servers() {
+			favorite_servers.access([](const std::unordered_set<game::netadr_t>& servers) {
 				std::string servers_buffer{};
-				for (const auto& itr : servers)
-				{
+				for (const auto& itr : servers) {
 					servers_buffer.append(utils::string::va("%i.%i.%i.%i:%hu\n", itr.ipv4.a, itr.ipv4.b, itr.ipv4.c, itr.ipv4.d, itr.port));
 				}
 
@@ -110,24 +93,19 @@ namespace server_list
 			});
 		}
 
-		void read_favorite_servers()
-		{
+		void read_favorite_servers() {
 			const std::string path = get_favorite_servers_file_path();
-			if (!utils::io::file_exists(path))
-			{
+			if (!utils::io::file_exists(path)) {
 				return;
 			}
 
-			favorite_servers.access([&path](std::unordered_set<game::netadr_t>& servers)
-			{
+			favorite_servers.access([&path](std::unordered_set<game::netadr_t>& servers) {
 				servers.clear();
 
 				std::string data;
-				if (utils::io::read_file(path, &data))
-				{
+				if (utils::io::read_file(path, &data)) {
 					const auto srv = utils::string::split(data, '\n');
-					for (const auto& server_address : srv)
-					{
+					for (const auto& server_address : srv) {
 						auto server = network::address_from_string(server_address);
 						servers.insert(server);
 					}
@@ -136,19 +114,15 @@ namespace server_list
 		}
 	}
 
-	bool get_master_server(game::netadr_t& address)
-	{
+	bool get_master_server(game::netadr_t& address) {
 		address = network::address_from_string("master.ezz.lol:20810");
 		return address.type != game::NA_BAD;
 	}
 
-	void request_servers(callback callback)
-	{
-		master_state.access([&callback](state& s)
-		{
+	void request_servers(callback callback) {
+		master_state.access([&callback](state& s) {
 			game::netadr_t addr{};
-			if (!get_master_server(addr))
-			{
+			if (!get_master_server(addr)) {
 				return;
 			}
 
@@ -161,23 +135,17 @@ namespace server_list
 		});
 	}
 
-	void add_favorite_server(game::netadr_t addr)
-	{
-		favorite_servers.access([&addr](std::unordered_set<game::netadr_t>& servers)
-		{
+	void add_favorite_server(game::netadr_t addr) {
+		favorite_servers.access([&addr](std::unordered_set<game::netadr_t>& servers) {
 			servers.insert(addr);
 		});
 		write_favorite_servers();
 	}
 
-	void remove_favorite_server(game::netadr_t addr)
-	{
-		favorite_servers.access([&addr](std::unordered_set<game::netadr_t>& servers)
-		{
-			for (auto it = servers.begin(); it != servers.end(); ++it)
-			{
-				if (network::are_addresses_equal(*it, addr))
-				{
+	void remove_favorite_server(game::netadr_t addr) {
+		favorite_servers.access([&addr](std::unordered_set<game::netadr_t>& servers) {
+			for (auto it = servers.begin(); it != servers.end(); ++it) {
+				if (network::are_addresses_equal(*it, addr)) {
 					servers.erase(it);
 					break;
 				}
@@ -186,35 +154,26 @@ namespace server_list
 		write_favorite_servers();
 	}
 
-	utils::concurrency::container<server_list>& get_favorite_servers()
-	{
+	utils::concurrency::container<server_list>& get_favorite_servers() {
 		return favorite_servers;
 	}
 
-	struct component final : client_component
-	{
-		void post_unpack() override
-		{
-			network::on("getServersResponse", [](const game::netadr_t& target, const network::data_view& data)
-			{
-				master_state.access([&](state& s)
-				{
+	struct component final : client_component {
+		void post_unpack() override {
+			network::on("getServersResponse", [](const game::netadr_t& target, const network::data_view& data) {
+				master_state.access([&](state& s) {
 					handle_server_list_response(target, data, s);
 				});
 			});
 
-			scheduler::loop([]
-			{
-				master_state.access([](state& s)
-				{
-					if (!s.requesting)
-					{
+			scheduler::loop([] {
+				master_state.access([](state& s) {
+					if (!s.requesting) {
 						return;
 					}
 
 					const auto now = std::chrono::high_resolution_clock::now();
-					if ((now - s.query_start) < 2s)
-					{
+					if ((now - s.query_start) < 2s) {
 						return;
 					}
 
@@ -226,16 +185,13 @@ namespace server_list
 
 			lua_server_info_to_table_hook.create(0x141F1FD10_g, lua_server_info_to_table_stub);
 
-			scheduler::once([]
-			{
+			scheduler::once([] {
 				read_favorite_servers();
 			}, scheduler::main);
 		}
 
-		void pre_destroy() override
-		{
-			master_state.access([](state& s)
-			{
+		void pre_destroy() override {
+			master_state.access([](state& s) {
 				s.requesting = false;
 				s.callback = {};
 			});

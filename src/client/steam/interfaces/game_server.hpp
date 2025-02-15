@@ -1,14 +1,12 @@
 #pragma once
 
-namespace steam
-{
-	class game_server
-	{
+namespace steam {
+	class game_server {
 	public:
 		~game_server() = default;
 
 		virtual bool InitGameServer(unsigned int unGameIP, unsigned short unGamePort, unsigned short usQueryPort,
-		                            unsigned int unServerFlags, unsigned int nAppID, const char* pchVersion);
+			unsigned int unServerFlags, unsigned int nAppID, const char* pchVersion);
 		virtual void SetProduct(const char* pchProductName);
 		virtual void SetGameDescription(const char* pchGameDescription);
 		virtual void SetModDir(const char* pchModDir);
@@ -32,8 +30,7 @@ namespace steam
 		virtual void SetGameTags(const char* pchGameTags);
 		virtual void SetGameData(const char* pchGameData);
 		virtual void SetRegion(const char* pchRegionName);
-		virtual int SendUserConnectAndAuthenticate(unsigned int unIPClient, const void* pvAuthBlob,
-		                                           unsigned int cubAuthBlobSize, steam_id* pSteamIDUser);
+		virtual int SendUserConnectAndAuthenticate(unsigned int unIPClient, const void* pvAuthBlob, unsigned int cubAuthBlobSize, steam_id* pSteamIDUser);
 		virtual steam_id CreateUnauthenticatedUserConnection();
 		virtual void SendUserDisconnect(steam_id steamIDUser);
 		virtual bool BUpdateUserData(steam_id steamIDUser, const char* pchPlayerName, unsigned int uScore);

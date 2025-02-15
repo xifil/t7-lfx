@@ -8,15 +8,7 @@
 #include "dispatch.hpp"
 #include "html_argument.hpp"
 
-class html_frame
-	: doc_host_ui_handler
-	, service_provider
-	, internet_security_manager
-	, ole_client_site
-	, ole_in_place_frame
-	, ole_in_place_site
-	, dispatch
-{
+class html_frame : doc_host_ui_handler, service_provider, internet_security_manager, ole_client_site, ole_in_place_frame, ole_in_place_site, dispatch {
 public:
 	html_frame();
 	html_frame(const html_frame&) = delete;
@@ -46,9 +38,7 @@ public:
 
 	void register_callback(const std::string& name, const std::function<CComVariant(const std::vector<html_argument>&)>& callback);
 
-	HRESULT STDMETHODCALLTYPE QueryInterface(
-		REFIID riid,
-		void** ppvObject) override;
+	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppvObject) override;
 
 private:
 	HWND window_ = nullptr;
@@ -62,21 +52,17 @@ private:
 	HRESULT STDMETHODCALLTYPE GetHostInfo(DOCHOSTUIINFO* pInfo) override;
 	HRESULT STDMETHODCALLTYPE GetWindow(HWND* lphwnd) override;
 
-	ULONG STDMETHODCALLTYPE AddRef() override
-	{
+	ULONG STDMETHODCALLTYPE AddRef() override {
 		return 1;
 	}
 
-	ULONG STDMETHODCALLTYPE Release() override
-	{
+	ULONG STDMETHODCALLTYPE Release() override {
 		return 1;
 	}
 
-	HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgDispId)
-	override;
+	HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgDispId) override;
 	HRESULT STDMETHODCALLTYPE Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pDispParams,
-	                                 VARIANT* pVarResult, EXCEPINFO* pExcepInfo, UINT* puArgErr) override;
-
+		VARIANT* pVarResult, EXCEPINFO* pExcepInfo, UINT* puArgErr) override;
 
 	HRESULT STDMETHODCALLTYPE GetExternal(IDispatch** ppDispatch) override;
 };

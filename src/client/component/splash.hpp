@@ -1,7 +1,6 @@
 #pragma once
 
-namespace splash
-{
+namespace splash {
 	void hide();
 	HWND get_window();
 }

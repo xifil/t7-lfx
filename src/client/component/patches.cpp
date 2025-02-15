@@ -6,15 +6,11 @@
 
 #include <utils/hook.hpp>
 
-namespace patches
-{
-	namespace
-	{
+namespace patches {
+	namespace {
 		const game::dvar_t* lobby_min_players;
 
-		void script_errors_stub([[maybe_unused]] const char* file, [[maybe_unused]] int line,
-			[[maybe_unused]] unsigned int code, const char* fmt, ...)
-		{
+		void script_errors_stub([[maybe_unused]] const char* file, [[maybe_unused]] int line, [[maybe_unused]] unsigned int code, const char* fmt, ...) {
 			char buffer[0x1000];
 
 			{
@@ -27,16 +23,12 @@ namespace patches
 			game::Com_Error(game::ERROR_SCRIPT_DROP, "%s", buffer);
 		}
 
-		void scr_get_num_expected_players()
-		{
-			auto expected_players = game::LobbyHost_GetClientCount(game::LOBBY_TYPE_GAME,
-				game::LOBBY_CLIENT_TYPE_ALL);
+		void scr_get_num_expected_players() {
+			auto expected_players = game::LobbyHost_GetClientCount(game::LOBBY_TYPE_GAME, game::LOBBY_CLIENT_TYPE_ALL);
 
 			const auto mode = game::Com_SessionMode_GetMode();
-			if ((mode == game::MODE_ZOMBIES || mode == game::MODE_CAMPAIGN))
-			{
-				if (const auto min_players = lobby_min_players->current.value.integer)
-				{
+			if ((mode == game::MODE_ZOMBIES || mode == game::MODE_CAMPAIGN)) {
+				if (const auto min_players = lobby_min_players->current.value.integer) {
 					expected_players = min_players;
 				}
 			}
@@ -45,10 +37,8 @@ namespace patches
 			game::Scr_AddInt(game::SCRIPTINSTANCE_SERVER, num_expected_players);
 		}
 
-		void sv_execute_client_messages_stub(game::client_s* client, game::msg_t* msg)
-		{
-			if ((client->reliableSequence - client->reliableAcknowledge) < 0)
-			{
+		void sv_execute_client_messages_stub(game::client_s* client, game::msg_t* msg) {
+			if ((client->reliableSequence - client->reliableAcknowledge) < 0) {
 				client->reliableAcknowledge = client->reliableSequence;
 				game::SV_DropClient(client, "EXE_LOSTRELIABLECOMMANDS", true, true);
 				return;
@@ -58,10 +48,8 @@ namespace patches
 		}
 	}
 
-	struct component final : generic_component
-	{
-		void post_unpack() override
-		{
+	struct component final : generic_component {
+		void post_unpack() override {
 			// print hexadecimal xuids in chat game log command
 			utils::hook::set<char>(game::select(0x142FD9362, 0x140E16FA2), 'x');
 

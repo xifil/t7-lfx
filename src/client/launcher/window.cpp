@@ -7,17 +7,14 @@
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
 #endif
 
-namespace
-{
+namespace {
 	thread_local uint32_t window_count = 0;
 	
-	uint32_t get_dpi_for_window(const HWND window)
-	{
-		const utils::nt::library user32{"user32.dll"};
+	uint32_t get_dpi_for_window(const HWND window) {
+		const utils::nt::library user32{ "user32.dll" };
 		const auto get_dpi = user32 ? user32.get_proc<UINT(WINAPI *)(HWND)>("GetDpiForWindow") : nullptr;
 
-		if (!get_dpi)
-		{
+		if (!get_dpi) {
 			return USER_DEFAULT_SCREEN_DPI;
 		}
 
@@ -25,8 +22,7 @@ namespace
 	}
 }
 
-window::window(const std::string& title, const int width, const int height,
-	std::function<std::optional<LRESULT>(window*, UINT, WPARAM, LPARAM)> callback,
+window::window(const std::string& title, const int width, const int height, std::function<std::optional<LRESULT>(window*, UINT, WPARAM, LPARAM)> callback,
 	const long flags)
 	: callback_(std::move(callback))
 {
@@ -50,49 +46,42 @@ window::window(const std::string& title, const int width, const int height,
 
 	++window_count;
 
-	this->handle_ = CreateWindowExA(NULL, this->wc_.lpszClassName, title.data(), flags, x, y, width, height, nullptr,
-		nullptr, this->wc_.hInstance, this);
+	this->handle_ = CreateWindowExA(NULL, this->wc_.lpszClassName, title.data(), flags, x, y, width, height, nullptr, nullptr, this->wc_.hInstance, this);
 
 	BOOL value = TRUE;
-	DwmSetWindowAttribute(this->handle_,
-		DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(value));
+	DwmSetWindowAttribute(this->handle_, DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(value));
 
 	SendMessageA(this->handle_, WM_DPICHANGED, 0, 0);
 	ShowWindow(this->handle_, SW_SHOW);
 	SetForegroundWindow(this->handle_);
 }
 
-window::~window()
-{
+window::~window() {
 	this->close();
 	UnregisterClass(this->wc_.lpszClassName, this->wc_.hInstance);
 }
 
-void window::close()
-{
-	if (!this->handle_) return;
+void window::close() {
+	if (!this->handle_) {
+		return;
+	}
 
 	DestroyWindow(this->handle_);
 	this->handle_ = nullptr;
 }
 
-void window::run()
-{
+void window::run() {
 	MSG msg{};
-	while (GetMessage(&msg, nullptr, 0, 0))
-	{
+	while (GetMessage(&msg, nullptr, 0, 0)) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
 }
 
-LRESULT window::processor(const UINT message, const WPARAM w_param, const LPARAM l_param)
-{
-	if (message == WM_DPICHANGED)
-	{
+LRESULT window::processor(const UINT message, const WPARAM w_param, const LPARAM l_param) {
+	if (message == WM_DPICHANGED) {
 		const auto dpi = get_dpi_for_window(*this);
-		if (dpi != this->last_dpi_)
-		{
+		if (dpi != this->last_dpi_) {
 			RECT rect;
 			GetWindowRect(*this, &rect);
 
@@ -106,21 +95,17 @@ LRESULT window::processor(const UINT message, const WPARAM w_param, const LPARAM
 		}
 	}
 
-	if (message == WM_DESTROY)
-	{
-		if (--window_count == 0)
-		{
+	if (message == WM_DESTROY) {
+		if (--window_count == 0) {
 			PostQuitMessage(0);
 		}
 
 		return TRUE;
 	}
 
-	if (this->callback_)
-	{
+	if (this->callback_) {
 		const auto res = this->callback_(this, message, w_param, l_param);
-		if (res)
-		{
+		if (res) {
 			return *res;
 		}
 	}
@@ -128,10 +113,8 @@ LRESULT window::processor(const UINT message, const WPARAM w_param, const LPARAM
 	return DefWindowProc(*this, message, w_param, l_param);
 }
 
-LRESULT CALLBACK window::static_processor(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param)
-{
-	if (message == WM_CREATE)
-	{
+LRESULT CALLBACK window::static_processor(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param) {
+	if (message == WM_CREATE) {
 		auto data = reinterpret_cast<LPCREATESTRUCT>(l_param);
 		SetWindowLongPtrA(hwnd, GWLP_USERDATA, LONG_PTR(data->lpCreateParams));
 
@@ -139,13 +122,13 @@ LRESULT CALLBACK window::static_processor(HWND hwnd, UINT message, WPARAM w_para
 	}
 
 	const auto self = reinterpret_cast<window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-	if (self) return self->processor(message, w_param, l_param);
+	if (self) {
+		return self->processor(message, w_param, l_param);
+	}
 
 	return DefWindowProc(hwnd, message, w_param, l_param);
 }
 
-
-window::operator HWND() const
-{
+window::operator HWND() const {
 	return this->handle_;
 }

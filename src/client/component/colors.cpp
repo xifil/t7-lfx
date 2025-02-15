@@ -8,33 +8,25 @@
 #include <utils/hook.hpp>
 #include <utils/string.hpp>
 
-namespace colors
-{
-	namespace
-	{
+namespace colors {
+	namespace {
 		utils::hook::detour cl_get_client_name_hook;
 
-		std::optional<int> get_color_for_xuid(const uint64_t xuid)
-		{
-			if (xuid == 0xCD02AF6448291209
-				|| xuid == 0x10F0C433E08E1357
-				|| xuid == 0x60E0FEFE42341715)
-			{
+		std::optional<int> get_color_for_xuid(const uint64_t xuid) {
+			if (xuid == 0xCD02AF6448291209 || xuid == 0x10F0C433E08E1357 || xuid == 0x60E0FEFE42341715) {
 				return 2;
 			}
 
 			return {};
 		}
 
-		std::optional<int> get_color_for_client(const int client_num)
-		{
+		std::optional<int> get_color_for_client(const int client_num) {
 			const auto xuid = auth::get_guid(static_cast<size_t>(client_num));
 			return get_color_for_xuid(xuid);
 		}
 
 		template <size_t index>
-		void patch_color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a = 255)
-		{
+		void patch_color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a = 255) {
 			auto* color_table = reinterpret_cast<uint8_t*>(0x142FEFE20_g);
 			auto* g_color_table = reinterpret_cast<float*>(0x142FB5CF0_g);
 
@@ -55,19 +47,15 @@ namespace colors
 			utils::hook::copy(g_color_table + index * 4, color_float, sizeof(color_float));
 		}
 
-		bool cl_get_client_name_stub(const int local_client_num, const int index, char* buf, const int size,
-		                             const bool add_clan_name)
-		{
+		bool cl_get_client_name_stub(const int local_client_num, const int index, char* buf, const int size, const bool add_clan_name) {
 			const auto res = cl_get_client_name_hook.invoke<bool>(local_client_num, index, buf, size, add_clan_name);
 
-			if (_ReturnAddress() == reinterpret_cast<void*>(0x1406A7B56_g))
-			{
+			if (_ReturnAddress() == reinterpret_cast<void*>(0x1406A7B56_g)) {
 				return res;
 			}
 
 			const auto color = get_color_for_client(index);
-			if (!color)
-			{
+			if (!color) {
 				return res;
 			}
 
@@ -77,13 +65,11 @@ namespace colors
 			return res;
 		}
 
-		/*const char* get_gamer_tag_stub(const uint32_t num)
-		{
+		/*const char* get_gamer_tag_stub(const uint32_t num) {
 			const auto color = get_color_for_xuid(steam::SteamUser()->GetSteamID().bits);
 			const auto name = reinterpret_cast<const char* (*)(uint32_t)>(0x141EC6E80)(num) + 8;
 
-			if (!color || num)
-			{
+			if (!color || num) {
 				return name;
 			}
 
@@ -91,16 +77,14 @@ namespace colors
 		}*/
 	}
 
-	struct component final : client_component
-	{
-		void post_unpack() override
-		{
-			patch_color<1>(255, 49, 49); // 1  - Red
-			patch_color<2>(134, 192, 0); // 2  - Green
-			patch_color<3>(255, 173, 34); // 3  - Yellow
-			patch_color<4>(0, 135, 193); // 4  - Blue
-			patch_color<5>(32, 197, 255); // 5  - Light Blue
-			patch_color<6>(151, 80, 221); // 6  - Pink
+	struct component final : client_component {
+		void post_unpack() override {
+			patch_color<1>(255, 49, 49);	// 1  - Red
+			patch_color<2>(134, 192, 0);	// 2  - Green
+			patch_color<3>(255, 173, 34);	// 3  - Yellow
+			patch_color<4>(0, 135, 193);	// 4  - Blue
+			patch_color<5>(32, 197, 255);	// 5  - Light Blue
+			patch_color<6>(151, 80, 221);	// 6  - Pink
 
 			// Old addresses
 			cl_get_client_name_hook.create(game::CL_GetClientName, cl_get_client_name_stub);

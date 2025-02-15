@@ -1,22 +1,20 @@
 #include <std_include.hpp>
 #include "../services.hpp"
 
-namespace demonware
-{
-	bdDDL::bdDDL() : service(96, "bdDDL")
+namespace demonware {
+	bdDDL::bdDDL()
+		: service(96, "bdDDL")
 	{
-		this->register_task(1, &bdDDL::verifyDDLFiles);
+		this->register_task(1, &bdDDL::verify_ddl_files);
 	}
 
-	void bdDDL::verifyDDLFiles(service_server* server, byte_buffer* buffer) const
-	{
+	void bdDDL::verify_ddl_files(service_server* server, byte_buffer* buffer) const {
 		uint32_t count;
 		buffer->read_uint32(&count);
 
 		auto reply = server->create_reply(this->task_id());
 
-		for (uint32_t i = 0; i < count; i++)
-		{
+		for (uint32_t i = 0; i < count; i++) {
 			auto checksum = std::make_unique<bdDDLChecksumResult>();
 			checksum->deserialize(buffer);
 			checksum->checksum_matched = true;

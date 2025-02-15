@@ -1,9 +1,6 @@
 #pragma once
 
-#pragma once
-
-class html_argument final
-{
+class html_argument final {
 public:
 	html_argument() = default;
 	html_argument(VARIANT* val);

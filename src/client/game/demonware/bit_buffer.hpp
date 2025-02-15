@@ -1,15 +1,13 @@
 #pragma once
 
-namespace demonware
-{
-	class bit_buffer final
-	{
+namespace demonware {
+	class bit_buffer final {
 	public:
 		bit_buffer() = default;
 
-		explicit bit_buffer(std::string buffer) : buffer_(std::move(buffer))
-		{
-		}
+		explicit bit_buffer(std::string buffer)
+			: buffer_(std::move(buffer))
+		{}
 
 		bool read_bytes(unsigned int bytes, unsigned char* output);
 		bool read_bool(bool* output);

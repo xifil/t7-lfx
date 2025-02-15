@@ -1,9 +1,7 @@
 #pragma once
 
-namespace demonware
-{
-	class bdUNK63 final : public service
-	{
+namespace demonware {
+	class bdUNK63 final : public service {
 	public:
 		bdUNK63();
 

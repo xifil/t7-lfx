@@ -2,8 +2,7 @@
 
 #include <cstdint>
 
-constexpr uint64_t intact_integrity_check_blocks[] =
-{
+constexpr uint64_t intact_integrity_check_blocks[] = {
 	0x1400A3F04,
 	0x1412D7E4C,
 	0x141D0E9B4,
@@ -973,8 +972,7 @@ constexpr uint64_t intact_integrity_check_blocks[] =
 	0x15F9D8AE1,
 };
 
-constexpr uint64_t split_integrity_check_blocks[] =
-{
+constexpr uint64_t split_integrity_check_blocks[] = {
 	0x140133F48,
 	0x1412CDAE8,
 	0x142189FC6,
@@ -1229,14 +1227,12 @@ constexpr uint64_t split_integrity_check_blocks[] =
 	0x15F9B7E1A,
 };
 
-constexpr uint64_t intact_integrity_check_blocks_server[] =
-{
+constexpr uint64_t intact_integrity_check_blocks_server[] = {
 	0x140064DC4,
 	0x140909BD4,
 	0x1410654C1,
 };
 
-constexpr uint64_t split_integrity_check_blocks_server[] =
-{
+constexpr uint64_t split_integrity_check_blocks_server[] = {
 	0x1400621A8,
 };

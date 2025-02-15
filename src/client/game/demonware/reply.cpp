@@ -5,10 +5,8 @@
 
 #include <utils/cryptography.hpp>
 
-namespace demonware
-{
-	std::string unencrypted_reply::data()
-	{
+namespace demonware {
+	std::string unencrypted_reply::data() {
 		byte_buffer result;
 		result.set_use_data_types(false);
 
@@ -20,8 +18,7 @@ namespace demonware
 		return result.get_buffer();
 	}
 
-	std::string encrypted_reply::data()
-	{
+	std::string encrypted_reply::data() {
 		byte_buffer result;
 		result.set_use_data_types(false);
 
@@ -65,22 +62,28 @@ namespace demonware
 		return response.get_buffer();
 	}
 
-	void remote_reply::send(bit_buffer* buffer, const bool encrypted)
-	{
+	void remote_reply::send(bit_buffer* buffer, const bool encrypted) {
 		std::unique_ptr<typed_reply> reply;
 
-		if (encrypted) reply = std::make_unique<encrypted_reply>(this->type_, buffer);
-		else reply = std::make_unique<unencrypted_reply>(this->type_, buffer);
+		if (encrypted) {
+			reply = std::make_unique<encrypted_reply>(this->type_, buffer);
+		}
+		else {
+			reply = std::make_unique<unencrypted_reply>(this->type_, buffer);
+		}
 
 		this->server_->send_reply(reply.get());
 	}
 
-	void remote_reply::send(byte_buffer* buffer, const bool encrypted)
-	{
+	void remote_reply::send(byte_buffer* buffer, const bool encrypted) {
 		std::unique_ptr<typed_reply> reply;
 
-		if (encrypted) reply = std::make_unique<encrypted_reply>(this->type_, buffer);
-		else reply = std::make_unique<unencrypted_reply>(this->type_, buffer);
+		if (encrypted) {
+			reply = std::make_unique<encrypted_reply>(this->type_, buffer);
+		}
+		else {
+			reply = std::make_unique<unencrypted_reply>(this->type_, buffer);
+		}
 
 		this->server_->send_reply(reply.get());
 	}

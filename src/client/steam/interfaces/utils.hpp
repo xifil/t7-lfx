@@ -1,9 +1,7 @@
 #pragma once
 
-namespace steam
-{
-	class utils
-	{
+namespace steam {
+	class utils {
 	public:
 		~utils() = default;
 
@@ -20,8 +18,7 @@ namespace steam
 		virtual void SetOverlayNotificationPosition(int eNotificationPosition);
 		virtual bool IsAPICallCompleted(unsigned long long hSteamAPICall, bool* pbFailed);
 		virtual int GetAPICallFailureReason(unsigned long long hSteamAPICall);
-		virtual bool GetAPICallResult(unsigned long long hSteamAPICall, void* pCallback, int cubCallback,
-		                              int iCallbackExpected, bool* pbFailed);
+		virtual bool GetAPICallResult(unsigned long long hSteamAPICall, void* pCallback, int cubCallback, int iCallbackExpected, bool* pbFailed);
 		virtual void RunFrame();
 		virtual unsigned int GetIPCCallCount();
 		virtual void SetWarningMessageHook(void (*pFunction)(int hpipe, const char* message));
@@ -29,8 +26,7 @@ namespace steam
 		virtual bool BOverlayNeedsPresent();
 		virtual unsigned long long CheckFileSignature(const char* szFileName);
 
-		virtual bool ShowGamepadTextInput(int eInputMode, int eInputLineMode, const char* szText,
-		                                  unsigned int uMaxLength);
+		virtual bool ShowGamepadTextInput(int eInputMode, int eInputLineMode, const char* szText, unsigned int uMaxLength);
 		virtual unsigned int GetEnteredGamepadTextLength();
 		virtual bool GetEnteredGamepadTextInput(char* pchValue, unsigned int cchValueMax);
 

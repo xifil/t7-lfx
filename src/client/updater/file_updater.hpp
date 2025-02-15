@@ -2,10 +2,8 @@
 
 #include "progress_listener.hpp"
 
-namespace updater
-{
-	class file_updater
-	{
+namespace updater {
+	class file_updater {
 	public:
 		file_updater(progress_listener& listener, std::filesystem::path base, std::filesystem::path process_file);
 

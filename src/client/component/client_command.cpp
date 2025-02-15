@@ -9,18 +9,14 @@
 #include "command.hpp"
 #include "client_command.hpp"
 
-namespace client_command
-{
-	namespace
-	{
+namespace client_command {
+	namespace {
 		std::unordered_map<std::string, callback> handlers;
 
-		void client_command_stub(const int client_num)
-		{
+		void client_command_stub(const int client_num) {
 			const auto ent = &game::g_entities[client_num];
 
-			if (ent->client == nullptr)
-			{
+			if (ent->client == nullptr) {
 				// Client is not fully in game
 				return;
 			}
@@ -28,8 +24,7 @@ namespace client_command
 			const command::params_sv params;
 
 			const auto command = utils::string::to_lower(params.get(0));
-			if (const auto got = handlers.find(command); got != handlers.end())
-			{
+			if (const auto got = handlers.find(command); got != handlers.end()) {
 				got->second(ent, params);
 				return;
 			}
@@ -38,17 +33,14 @@ namespace client_command
 		}
 	}
 
-	void add(const std::string& name, const callback& cmd)
-	{
+	void add(const std::string& name, const callback& cmd) {
 		const auto command = utils::string::to_lower(name);
 		handlers[command] = cmd;
 	}
 
-	class component final : public server_component
-	{
+	class component final : public server_component {
 	public:
-		void post_unpack() override
-		{
+		void post_unpack() override {
 			utils::hook::call(0x14052F81B_g, client_command_stub);
 		}
 	};

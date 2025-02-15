@@ -1,20 +1,16 @@
 #pragma once
 
-namespace console
-{
+namespace console {
 	void set_title(const std::string& title);
 	void set_interceptor(std::function<void(const std::string& message)> callback);
 	void remove_interceptor();
 
-	struct scoped_interceptor
-	{
-		scoped_interceptor(std::function<void(const std::string& message)> callback)
-		{
+	struct scoped_interceptor {
+		scoped_interceptor(std::function<void(const std::string& message)> callback) {
 			set_interceptor(std::move(callback));
 		}
 
-		~scoped_interceptor()
-		{
+		~scoped_interceptor() {
 			remove_interceptor();
 		}
 

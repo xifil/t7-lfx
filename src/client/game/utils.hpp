@@ -2,8 +2,7 @@
 
 #include "structs.hpp"
 
-namespace game
-{
+namespace game {
 	[[nodiscard]] std::string get_dvar_string(const char* dvar_name);
 	[[nodiscard]] int get_dvar_int(const char* dvar_name);
 	[[nodiscard]] bool get_dvar_bool(const char* dvar_name);

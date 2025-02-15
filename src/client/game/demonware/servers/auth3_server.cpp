@@ -6,13 +6,10 @@
 #include <utils/cryptography.hpp>
 #include <utils/string.hpp>
 
-namespace demonware
-{
-	namespace
-	{
+namespace demonware {
+	namespace {
 #pragma pack(push, 1)
-		struct auth_ticket
-		{
+		struct auth_ticket {
 			unsigned int m_magicNumber;
 			char m_type;
 			unsigned int m_titleID;
@@ -28,19 +25,18 @@ namespace demonware
 #pragma pack(pop)
 	}
 
-	void auth3_server::send_reply(reply* data)
-	{
-		if (!data) return;
+	void auth3_server::send_reply(reply* data) {
+		if (!data) {
+			return;
+		}
 		this->send(data->data());
 	}
 
-	void auth3_server::handle(const std::string& packet)
-	{
-		if (packet.starts_with("POST /auth/"))
-		{
-#ifndef NDEBUG
-			printf("[DW]: [auth]: user requested authentication.\n");
-#endif
+	void auth3_server::handle(const std::string& packet) {
+		if (packet.starts_with("POST /auth/")) {
+#			ifndef NDEBUG
+				printf("[DW]: [auth]: user requested authentication.\n");
+#			endif
 			return;
 		}
 
@@ -52,42 +48,36 @@ namespace demonware
 		rapidjson::Document j;
 		j.Parse(packet.data(), packet.size());
 
-		if (j.HasMember("title_id") && j["title_id"].IsString())
-		{
+		if (j.HasMember("title_id") && j["title_id"].IsString()) {
 			title_id = std::stoul(j["title_id"].GetString());
 		}
 
-		if (j.HasMember("iv_seed") && j["iv_seed"].IsString())
-		{
+		if (j.HasMember("iv_seed") && j["iv_seed"].IsString()) {
 			iv_seed = std::stoul(j["iv_seed"].GetString());
 		}
 
-		if (j.HasMember("identity") && j["identity"].IsString())
-		{
+		if (j.HasMember("identity") && j["identity"].IsString()) {
 			identity = j["identity"].GetString();
 		}
 
-		if (j.HasMember("extra_data") && j["extra_data"].IsString())
-		{
+		if (j.HasMember("extra_data") && j["extra_data"].IsString()) {
 			rapidjson::Document extra_data;
 			auto& ed = j["extra_data"];
 			extra_data.Parse(ed.GetString(), ed.GetStringLength());
 
-			if (extra_data.HasMember("token") && extra_data["token"].IsString())
-			{
+			if (extra_data.HasMember("token") && extra_data["token"].IsString()) {
 				auto& token_field = extra_data["token"];
 				std::string token_b64(token_field.GetString(), token_field.GetStringLength());
 				token = utils::cryptography::base64::decode(token_b64);
 			}
 		}
 
-#ifndef NDEBUG
-		printf("[DW]: [auth]: authenticating user %s\n", token.data() + 64);
-#endif
+#		ifndef NDEBUG
+			printf("[DW]: [auth]: authenticating user %s\n", token.data() + 64);
+#		endif
 
 		std::string auth_key(reinterpret_cast<char*>(token.data() + 32), 24);
-		std::string session_key(
-			"\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37", 24);
+		std::string session_key("\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37", 24);
 
 		// client_ticket
 		auth_ticket ticket{};
@@ -103,10 +93,8 @@ namespace demonware
 		std::memcpy(ticket.m_sessionKey, session_key.data(), 24);
 
 		const auto iv = utils::cryptography::tiger::compute(std::string(reinterpret_cast<char*>(&iv_seed), 4));
-		const auto ticket_enc = utils::cryptography::des3::encrypt(
-			std::string(reinterpret_cast<char*>(&ticket), sizeof(ticket)), iv, auth_key);
-		const auto ticket_b64 = utils::cryptography::base64::encode(
-			reinterpret_cast<const unsigned char*>(ticket_enc.data()), 128);
+		const auto ticket_enc = utils::cryptography::des3::encrypt(std::string(reinterpret_cast<char*>(&ticket), sizeof(ticket)), iv, auth_key);
+		const auto ticket_b64 = utils::cryptography::base64::encode(reinterpret_cast<const unsigned char*>(ticket_enc.data()), 128);
 
 		// server_ticket
 		uint8_t auth_data[128];
@@ -134,8 +122,7 @@ namespace demonware
 		extra.AddMember("extended_data", lul, extra.GetAllocator());
 
 		rapidjson::StringBuffer extra_buffer{};
-		rapidjson::Writer<rapidjson::StringBuffer, rapidjson::Document::EncodingType, rapidjson::ASCII<>>
-			extra_writer(extra_buffer);
+		rapidjson::Writer<rapidjson::StringBuffer, rapidjson::Document::EncodingType, rapidjson::ASCII<>> extra_writer(extra_buffer);
 		extra.Accept(extra_writer);
 
 		std::string extra_data{};
@@ -162,8 +149,7 @@ namespace demonware
 		doc.AddMember("lsg_endpoint", value, doc.GetAllocator());
 
 		rapidjson::StringBuffer buffer{};
-		rapidjson::Writer<rapidjson::StringBuffer, rapidjson::Document::EncodingType, rapidjson::ASCII<>>
-			writer(buffer);
+		rapidjson::Writer<rapidjson::StringBuffer, rapidjson::Document::EncodingType, rapidjson::ASCII<>> writer(buffer);
 		doc.Accept(writer);
 
 		// http stuff
@@ -179,8 +165,8 @@ namespace demonware
 
 		this->send_reply(&reply);
 
-#ifndef NDEBUG
-		printf("[DW]: [auth]: user successfully authenticated.\n");
-#endif
+#		ifndef NDEBUG
+			printf("[DW]: [auth]: user successfully authenticated.\n");
+#		endif
 	}
 }

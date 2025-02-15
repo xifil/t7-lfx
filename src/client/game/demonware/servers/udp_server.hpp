@@ -3,22 +3,17 @@
 #include "base_server.hpp"
 #include <utils/concurrency.hpp>
 
-namespace demonware
-{
-	class udp_server : public base_server
-	{
+namespace demonware {
+	class udp_server : public base_server {
 	public:
-		struct endpoint_data
-		{
+		struct endpoint_data {
 			SOCKET socket{};
 			sockaddr_in address{};
 
 			endpoint_data() = default;
 
-			endpoint_data(const SOCKET sock, const sockaddr* addr, const int size)
-			{
-				if (size != sizeof(this->address))
-				{
+			endpoint_data(const SOCKET sock, const sockaddr* addr, const int size) {
+				if (size != sizeof(this->address)) {
 					throw std::runtime_error("Invalid size");
 				}
 
@@ -40,14 +35,12 @@ namespace demonware
 		void send(const endpoint_data& endpoint, std::string data);
 
 	private:
-		struct in_packet
-		{
+		struct in_packet {
 			std::string data;
 			endpoint_data endpoint;
 		};
 
-		struct out_packet
-		{
+		struct out_packet {
 			std::string data;
 			sockaddr_in address;
 		};

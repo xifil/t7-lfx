@@ -3,11 +3,9 @@
 #include <game/game.hpp>
 #include <utils/byte_buffer.hpp>
 
-namespace profile_infos
-{
-	struct profile_info
-	{
-		int32_t version{3};
+namespace profile_infos {
+	struct profile_info {
+		int32_t version{ 3 };
 		std::string ddl{};
 
 		profile_info() = default;

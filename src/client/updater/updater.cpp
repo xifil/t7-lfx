@@ -4,10 +4,8 @@
 #include "updater_ui.hpp"
 #include "file_updater.hpp"
 
-namespace updater
-{
-	void run(const std::filesystem::path& base)
-	{
+namespace updater {
+	void run(const std::filesystem::path& base) {
 		const auto self = utils::nt::library::get_by_address(run);
 		const auto self_file = self.get_path();
 

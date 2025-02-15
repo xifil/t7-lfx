@@ -3,10 +3,8 @@
 #include "base_server.hpp"
 #include <utils/concurrency.hpp>
 
-namespace demonware
-{
-	class tcp_server : public base_server
-	{
+namespace demonware {
+	class tcp_server : public base_server {
 	public:
 		using base_server::base_server;
 

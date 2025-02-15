@@ -6,10 +6,8 @@
 #include <utils/progress_ui.hpp>
 #include <game/game.hpp>
 
-namespace updater
-{
-	class updater_ui : public progress_listener
-	{
+namespace updater {
+	class updater_ui : public progress_listener {
 	public:
 		updater_ui();
 		~updater_ui();

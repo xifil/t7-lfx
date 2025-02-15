@@ -1,7 +1,6 @@
 #pragma once
 
-namespace workshop
-{
+namespace workshop {
 	extern bool downloading_workshop_item;
 
 	std::string get_usermap_publisher_id(const std::string& folder_name);

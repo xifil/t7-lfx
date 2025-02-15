@@ -2,11 +2,9 @@
 #include "../window.hpp"
 #include "html_frame.hpp"
 
-class html_window final
-{
+class html_window final {
 public:
-	html_window(const std::string& title, int width, int height,
-		long flags = (WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX)));
+	html_window(const std::string& title, int width, int height, long flags = (WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX)));
 
 	~html_window() = default;
 

@@ -1,9 +1,7 @@
 #pragma once
 
-namespace steam
-{
-	class friends
-	{
+namespace steam {
+	class friends {
 	public:
 		~friends() = default;
 
@@ -60,15 +58,14 @@ namespace steam
 		virtual steam_id GetChatMemberByIndex(steam_id steamIDClan, int iUser);
 		virtual bool SendClanChatMessage(steam_id steamIDClanChat, const char* pchText);
 		virtual int GetClanChatMessage(steam_id steamIDClanChat, int iMessage, void* prgchText, int cchTextMax,
-		                               unsigned int* peChatEntryType, steam_id* pSteamIDChatter);
+			unsigned int* peChatEntryType, steam_id* pSteamIDChatter);
 		virtual bool IsClanChatAdmin(steam_id steamIDClanChat, steam_id steamIDUser);
 		virtual bool IsClanChatWindowOpenInSteam(steam_id steamIDClanChat);
 		virtual bool OpenClanChatWindowInSteam(steam_id steamIDClanChat);
 		virtual bool CloseClanChatWindowInSteam(steam_id steamIDClanChat);
 		virtual bool SetListenForFriendsMessages(bool bInterceptEnabled);
 		virtual bool ReplyToFriendMessage(steam_id steamIDFriend, const char* pchMsgToSend);
-		virtual int GetFriendMessage(steam_id steamIDFriend, int iMessageID, void* pvData, int cubData,
-		                             unsigned int* peChatEntryType);
+		virtual int GetFriendMessage(steam_id steamIDFriend, int iMessageID, void* pvData, int cubData, unsigned int* peChatEntryType);
 		virtual unsigned long long GetFollowerCount(steam_id steamID);
 		virtual unsigned long long IsFollowing(steam_id steamID);
 		virtual unsigned long long EnumerateFollowingList(unsigned int unStartIndex);

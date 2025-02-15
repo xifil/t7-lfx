@@ -8,24 +8,19 @@
 #include <utils/flags.hpp>
 #include <game/game.hpp>
 
-namespace workshop_id
-{
-	namespace
-	{
+namespace workshop_id {
+	namespace {
 		std::thread workshop_id_wait{};
 		std::atomic_bool running{true};
 
-		int write_pubid_to_file(std::string pubID)
-		{
+		int write_pubid_to_file(std::string pubID) {
 			std::string config_path = std::filesystem::current_path().string() + "/zone/";
 			std::string cmd_line = GetCommandLineA();
-			if (const char* exec_param = strstr(cmd_line.data(), "+exec"))
-			{
+			if (const char* exec_param = strstr(cmd_line.data(), "+exec")) {
 				const char* exec_value = exec_param + strlen("+exec ");
 				config_path += exec_value;
 			}
-			else
-			{
+			else {
 				config_path += "server_zm.cfg";
 			}
 
@@ -36,50 +31,42 @@ namespace workshop_id
 			std::string new_string = "set workshop_id \"" + pubID + "\"";
 
 			std::ifstream inputFile(config_path);
-			if (!inputFile.is_open())
-			{
+			if (!inputFile.is_open()) {
 				printf("Error opening server_zm.cfg file.\n");
 				return 1;
 			}
 
 			std::string line;
-			while (std::getline(inputFile, line))
-			{
-				if (line == new_string)
-				{
+			while (std::getline(inputFile, line)) {
+				if (line == new_string) {
 					printf("Correct dvar already exists.\n");
 					return 0;
 				}
 
-				if (line.find(line_to_find) != std::string::npos)
-				{
+				if (line.find(line_to_find) != std::string::npos) {
 					printf("Line replaced with new workshop id in %s.\n", config_path.c_str());
 					lines.push_back(new_string);
 					line_exists = true;
 				}
-				else
-				{
+				else {
 					lines.push_back(line);
 				}
 			}
 
 			inputFile.close();
 
-			if (!line_exists)
-			{
+			if (!line_exists) {
 				lines.push_back(new_string);
 				printf("The 'workshop_id' dvar added in %s successfully.\n", config_path.c_str());
 			}
 
 			std::ofstream outputFile(config_path);
-			if (!outputFile.is_open())
-			{
+			if (!outputFile.is_open()) {
 				printf("Error opening or adding the workshop_id dvar to %s file.\n", config_path.c_str());
 				return 1;
 			}
 
-			for (const std::string& updated_line : lines)
-			{
+			for (const std::string& updated_line : lines) {
 				outputFile << updated_line << std::endl;
 			}
 
@@ -90,12 +77,10 @@ namespace workshop_id
 			return 0;
 		}
 
-		void read_json_for_id(std::filesystem::path path)
-		{
+		void read_json_for_id(std::filesystem::path path) {
 			const auto json_str = utils::io::read_file(path);
 
-			if (json_str.empty())
-			{
+			if (json_str.empty()) {
 				printf("[ WorkshopID ] workshop.json has not been found in folder \n");
 				return;
 			}
@@ -103,14 +88,12 @@ namespace workshop_id
 			rapidjson::Document doc;
 			const rapidjson::ParseResult parse_result = doc.Parse(json_str);
 
-			if (parse_result.IsError() || !doc.IsObject())
-			{
+			if (parse_result.IsError() || !doc.IsObject()) {
 				printf("[ WorkshopID ] Unable to parse workshop.json from folder \n");
 				return;
 			}
 
-			if (!doc.HasMember("PublisherID"))
-			{
+			if (!doc.HasMember("PublisherID")) {
 				printf("[ WorkshopID ] PublisherID not found workshop.json is invalid \n");
 				return;
 			}
@@ -119,12 +102,10 @@ namespace workshop_id
 			write_pubid_to_file(pubID);
 		}
 
-		bool read_json_for_folder_name(std::filesystem::path path, std::string mapname)
-		{
+		bool read_json_for_folder_name(std::filesystem::path path, std::string mapname) {
 			const auto json_str = utils::io::read_file(path);
 
-			if (json_str.empty())
-			{
+			if (json_str.empty()) {
 				printf("[ FolderName ] workshop.json has not been found in folder \n");
 				return false;
 			}
@@ -132,79 +113,63 @@ namespace workshop_id
 			rapidjson::Document doc;
 			const rapidjson::ParseResult parse_result = doc.Parse(json_str);
 
-			if (parse_result.IsError() || !doc.IsObject())
-			{
+			if (parse_result.IsError() || !doc.IsObject()) {
 				printf("[ FolderName ] Unable to parse workshop.json from folder \n");
 				return false;
 			}
 
-			if (!doc.HasMember("FolderName"))
-			{
+			if (!doc.HasMember("FolderName")) {
 				printf("[ FolderName ] FolderName not found workshop.json is invalid \n");
 				return false;
 			}
 
 			std::string folder_name = doc["FolderName"].GetString();
-			if (mapname == folder_name)
-			{
+			if (mapname == folder_name) {
 				return true;
 			}
 
 			return false;
 		}
 
-		void get_map_id_from_json()
-		{
-			Sleep(20000);//let the custom map load in server
-			if (!running)
-			{
+		void get_map_id_from_json() {
+			Sleep(20000); // let the custom map load in server
+			if (!running) {
 				return;
 			}
 
 			const std::string loaded_mod_id = game::getPublisherIdFromLoadedMod();
-			if (utils::string::is_numeric(loaded_mod_id))
-			{
+			if (utils::string::is_numeric(loaded_mod_id)) {
 				printf(loaded_mod_id.c_str());
 				write_pubid_to_file(loaded_mod_id);
 			}
-			else
-			{
+			else {
 				const std::string& usermaps_path = std::filesystem::current_path().string() + "/usermaps";
 				std::string mapname = game::get_dvar_string("mapname");
 
-				for (const auto& entry : std::filesystem::directory_iterator(usermaps_path))
-				{
+				for (const auto& entry : std::filesystem::directory_iterator(usermaps_path)) {
 					std::filesystem::path workshop_json = entry.path() / "workshop.json";
 					std::filesystem::path workshop_json_zone = entry.path() / "zone/workshop.json";
 
-					if (entry.is_directory() && entry.path().filename() == mapname.data())
-					{
-						if (std::filesystem::exists(workshop_json) && !std::filesystem::is_directory(workshop_json))
-						{
+					if (entry.is_directory() && entry.path().filename() == mapname.data()) {
+						if (std::filesystem::exists(workshop_json) && !std::filesystem::is_directory(workshop_json)) {
 							read_json_for_id(workshop_json);
 							break;
 						}
 
-						if (std::filesystem::exists(workshop_json_zone) && !std::filesystem::is_directory(workshop_json_zone))
-						{
+						if (std::filesystem::exists(workshop_json_zone) && !std::filesystem::is_directory(workshop_json_zone)) {
 							read_json_for_id(workshop_json_zone);
 							break;
 						}
 					}
-					else
-					{
-						if (std::filesystem::exists(workshop_json) && !std::filesystem::is_directory(workshop_json))
-						{
-							if (read_json_for_folder_name(workshop_json, mapname))
-							{
+					else {
+						if (std::filesystem::exists(workshop_json) && !std::filesystem::is_directory(workshop_json)) {
+							if (read_json_for_folder_name(workshop_json, mapname)) {
 								read_json_for_id(workshop_json);
 								break;
 							}
 						}
-						else if (std::filesystem::exists(workshop_json_zone) && !std::filesystem::is_directory(workshop_json_zone))
-						{
-							if (read_json_for_folder_name(workshop_json_zone, mapname))
-							{
+						else if (std::filesystem::exists(workshop_json_zone) && !std::filesystem::is_directory(workshop_json_zone)) {
+							if (read_json_for_folder_name(workshop_json_zone, mapname)) {
 								read_json_for_id(workshop_json_zone);
 								break;
 							}
@@ -215,26 +180,21 @@ namespace workshop_id
 		}
 	}
 
-	class component final : public generic_component
-	{
+	class component final : public generic_component {
 	public:
 
-		void pre_destroy() override
-		{
+		void pre_destroy() override {
 			running = false;
-			if (workshop_id_wait.joinable())
-			{
+			if (workshop_id_wait.joinable()) {
 				workshop_id_wait.join();
 			}
 		}
 
-		void post_unpack() override
-		{
-			//currently only for zombies and custom maps
-			//people can set the workshop_id dvar manually in zone/server_zm.cfg
+		void post_unpack() override {
+			// currently only for zombies and custom maps
+			// people can set the workshop_id dvar manually in zone/server_zm.cfg
 
-			if (utils::flags::has_flag("dedicated") && game::Com_SessionMode_GetMode() == game::MODE_ZOMBIES)
-			{
+			if (utils::flags::has_flag("dedicated") && game::Com_SessionMode_GetMode() == game::MODE_ZOMBIES) {
 				workshop_id_wait = utils::thread::create_named_thread("workshop_id_wait", get_map_id_from_json);
 				workshop_id_wait.detach();
 			}

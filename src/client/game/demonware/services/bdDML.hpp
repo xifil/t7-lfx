@@ -1,16 +1,14 @@
 #pragma once
 
-namespace demonware
-{
-	class bdDML final : public service
-	{
+namespace demonware {
+	class bdDML final : public service {
 	public:
 		bdDML();
 
 	private:
-		void recordIP(service_server* server, byte_buffer* buffer) const;
-		void getUserData(service_server* server, byte_buffer* buffer) const;
-		void getUserHierarchicalData(service_server* server, byte_buffer* buffer) const;
-		void getUsersLastLogonData(service_server* server, byte_buffer* buffer) const;
+		void record_ip(service_server* server, byte_buffer* buffer) const;
+		void get_user_data(service_server* server, byte_buffer* buffer) const;
+		void get_user_hierarchical_data(service_server* server, byte_buffer* buffer) const;
+		void get_users_last_logon_data(service_server* server, byte_buffer* buffer) const;
 	};
 }

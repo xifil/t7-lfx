@@ -6,12 +6,9 @@
 
 #include "scheduler.hpp"
 
-namespace discord
-{
-	namespace
-	{
-		void ready(const DiscordUser* request)
-		{
+namespace discord {
+	namespace {
+		void ready(const DiscordUser* request) {
 			SetEnvironmentVariableA("discord_user", request->userId);
 
 			printf("Discord: Ready: %s - %s\n", request->userId, request->username);
@@ -31,17 +28,14 @@ namespace discord
 			Discord_UpdatePresence(&discord_presence);
 		}
 
-		void errored(const int error_code, const char* message)
-		{
+		void errored(const int error_code, const char* message) {
 			printf("Discord: Error (%i): %s\n", error_code, message);
 		}
 	}
 
-	class component final : public client_component
-	{
+	class component final : public client_component {
 	public:
-		void post_load() override
-		{
+		void post_load() override {
 			DiscordEventHandlers handlers;
 			ZeroMemory(&handlers, sizeof(handlers));
 			handlers.ready = ready;
@@ -58,10 +52,8 @@ namespace discord
 			scheduler::loop(Discord_RunCallbacks, scheduler::pipeline::async, 1s);
 		}
 
-		void pre_destroy() override
-		{
-			if (this->initialized_)
-			{
+		void pre_destroy() override {
+			if (this->initialized_) {
 				Discord_Shutdown();
 			}
 		}

@@ -1,62 +1,60 @@
 #pragma once
 
-namespace demonware
-{
-	class bdTeams final : public service
-	{
+namespace demonware {
+	class bdTeams final : public service {
 	public:
 		bdTeams();
 
 	private:
-		void createTeam(service_server* server, byte_buffer* buffer) const;
-		void updateTeamName(service_server* server, byte_buffer* buffer) const;
-		void promoteMember(service_server* server, byte_buffer* buffer) const;
-		void kickMember(service_server* server, byte_buffer* buffer) const;
-		void leaveTeam(service_server* server, byte_buffer* buffer) const;
-		void proposeMembership(service_server* server, byte_buffer* buffer) const;
-		void rejectMembership(service_server* server, byte_buffer* buffer) const;
-		void acceptMembership(service_server* server, byte_buffer* buffer) const;
-		void getPublicProfiles(service_server* server, byte_buffer* buffer) const;
-		void getPrivateProfile(service_server* server, byte_buffer* buffer) const;
-		void getPublicMemberProfiles(service_server* server, byte_buffer* buffer) const;
-		void getPrivateMemberProfiles(service_server* server, byte_buffer* buffer) const;
-		void setPublicProfile(service_server* server, byte_buffer* buffer) const;
-		void setPrivateProfile(service_server* server, byte_buffer* buffer) const;
-		void setPublicMemberProfile(service_server* server, byte_buffer* buffer) const;
-		void setPrivateMemberProfile(service_server* server, byte_buffer* buffer) const;
-		void getMemberships(service_server* server, byte_buffer* buffer) const;
-		void getMembers(service_server* server, byte_buffer* buffer) const;
-		void getOutgoingProposals(service_server* server, byte_buffer* buffer) const;
-		void withdrawProposal(service_server* server, byte_buffer* buffer) const;
-		void demoteMember(service_server* server, byte_buffer* buffer) const;
-		void promoteMemberToOwner(service_server* server, byte_buffer* buffer) const;
-		void getTeamInfo(service_server* server, byte_buffer* buffer) const;
-		void getIncomingProposals(service_server* server, byte_buffer* buffer) const;
-		void sendInstantMessage(service_server* server, byte_buffer* buffer) const;
-		void getMembershipsUser(service_server* server, byte_buffer* buffer) const;
-		void sendInstantMessageToTeam(service_server* server, byte_buffer* buffer) const;
-		void searchPublicTeamProfiles(service_server* server, byte_buffer* buffer) const;
-		void addApplication(service_server* server, byte_buffer* buffer) const;
-		void getApplicationsByTeam(service_server* server, byte_buffer* buffer) const;
-		void acceptApplication(service_server* server, byte_buffer* buffer) const;
-		void rejectApplication(service_server* server, byte_buffer* buffer) const;
-		void autoJoinTeam(service_server* server, byte_buffer* buffer) const;
-		void createTeamWithProfiles(service_server* server, byte_buffer* buffer) const;
-		void banMember(service_server* server, byte_buffer* buffer) const;
-		void unbanMember(service_server* server, byte_buffer* buffer) const;
-		void blockApplication(service_server* server, byte_buffer* buffer) const;
-		void unblockApplication(service_server* server, byte_buffer* buffer) const;
-		void updateTeamType(service_server* server, byte_buffer* buffer) const;
-		void setOnline(service_server* server, byte_buffer* buffer) const;
-		void getMembershipsWithCounts(service_server* server, byte_buffer* buffer) const;
-		void getMembershipsWithCountsUser(service_server* server, byte_buffer* buffer) const;
-		void searchTeams(service_server* server, byte_buffer* buffer) const;
-		void createTeamWithProfilesAndTeamType(service_server* server, byte_buffer* buffer) const;
-		void getMembershipsWithCountsAndTeamTypeUser(service_server* server, byte_buffer* buffer) const;
-		void getMembershipsWithCountsAndTeamType(service_server* server, byte_buffer* buffer) const;
-		void getTeamInfoWithTeamType(service_server* server, byte_buffer* buffer) const;
-		void setTeamAutoJoin(service_server* server, byte_buffer* buffer) const;
-		void getTeamAutoJoin(service_server* server, byte_buffer* buffer) const;
-		void getMembersAndPrivileges(service_server* server, byte_buffer* buffer) const;
+		void create_team(service_server* server, byte_buffer* buffer) const;
+		void update_team_name(service_server* server, byte_buffer* buffer) const;
+		void promote_member(service_server* server, byte_buffer* buffer) const;
+		void kick_member(service_server* server, byte_buffer* buffer) const;
+		void leave_team(service_server* server, byte_buffer* buffer) const;
+		void propose_membership(service_server* server, byte_buffer* buffer) const;
+		void reject_membership(service_server* server, byte_buffer* buffer) const;
+		void accept_membership(service_server* server, byte_buffer* buffer) const;
+		void get_public_profiles(service_server* server, byte_buffer* buffer) const;
+		void get_private_profile(service_server* server, byte_buffer* buffer) const;
+		void get_public_member_profiles(service_server* server, byte_buffer* buffer) const;
+		void get_private_member_profiles(service_server* server, byte_buffer* buffer) const;
+		void set_public_profile(service_server* server, byte_buffer* buffer) const;
+		void set_private_profile(service_server* server, byte_buffer* buffer) const;
+		void set_public_member_profile(service_server* server, byte_buffer* buffer) const;
+		void set_private_member_profile(service_server* server, byte_buffer* buffer) const;
+		void get_memberships(service_server* server, byte_buffer* buffer) const;
+		void get_members(service_server* server, byte_buffer* buffer) const;
+		void get_outgoing_proposals(service_server* server, byte_buffer* buffer) const;
+		void withdraw_proposal(service_server* server, byte_buffer* buffer) const;
+		void demote_member(service_server* server, byte_buffer* buffer) const;
+		void promote_member_to_owner(service_server* server, byte_buffer* buffer) const;
+		void get_team_info(service_server* server, byte_buffer* buffer) const;
+		void get_incoming_proposals(service_server* server, byte_buffer* buffer) const;
+		void send_instant_message(service_server* server, byte_buffer* buffer) const;
+		void get_memberships_user(service_server* server, byte_buffer* buffer) const;
+		void send_instant_message_to_team(service_server* server, byte_buffer* buffer) const;
+		void search_public_team_profiles(service_server* server, byte_buffer* buffer) const;
+		void add_application(service_server* server, byte_buffer* buffer) const;
+		void get_applications_by_team(service_server* server, byte_buffer* buffer) const;
+		void accept_application(service_server* server, byte_buffer* buffer) const;
+		void reject_application(service_server* server, byte_buffer* buffer) const;
+		void auto_join_team(service_server* server, byte_buffer* buffer) const;
+		void create_team_with_profiles(service_server* server, byte_buffer* buffer) const;
+		void ban_member(service_server* server, byte_buffer* buffer) const;
+		void unban_member(service_server* server, byte_buffer* buffer) const;
+		void block_application(service_server* server, byte_buffer* buffer) const;
+		void unblock_application(service_server* server, byte_buffer* buffer) const;
+		void update_team_type(service_server* server, byte_buffer* buffer) const;
+		void set_online(service_server* server, byte_buffer* buffer) const;
+		void get_memberships_with_counts(service_server* server, byte_buffer* buffer) const;
+		void get_memberships_with_counts_user(service_server* server, byte_buffer* buffer) const;
+		void search_teams(service_server* server, byte_buffer* buffer) const;
+		void create_team_with_profiles_and_team_type(service_server* server, byte_buffer* buffer) const;
+		void get_memberships_with_counts_and_team_type_user(service_server* server, byte_buffer* buffer) const;
+		void get_memberships_with_counts_and_team_type(service_server* server, byte_buffer* buffer) const;
+		void get_team_info_with_team_type(service_server* server, byte_buffer* buffer) const;
+		void set_team_auto_join(service_server* server, byte_buffer* buffer) const;
+		void get_team_auto_join(service_server* server, byte_buffer* buffer) const;
+		void get_members_and_privileges(service_server* server, byte_buffer* buffer) const;
 	};
 }

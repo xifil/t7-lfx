@@ -1,15 +1,13 @@
 #pragma once
 
-namespace demonware
-{
-	class byte_buffer final
-	{
+namespace demonware {
+	class byte_buffer final {
 	public:
 		byte_buffer() = default;
 
-		explicit byte_buffer(std::string buffer) : buffer_(std::move(buffer))
-		{
-		}
+		explicit byte_buffer(std::string buffer)
+			: buffer_(std::move(buffer))
+		{}
 
 		bool read_bool(bool* output);
 		bool read_byte(char* output);
@@ -28,8 +26,7 @@ namespace demonware
 		bool read_blob(std::string* output);
 		bool read_data_type(char expected);
 
-		bool read_array_header(unsigned char expected, unsigned int* element_count,
-		                       unsigned int* element_size = nullptr);
+		bool read_array_header(unsigned char expected, unsigned int* element_count, unsigned int* element_size = nullptr);
 
 		bool write_bool(bool data);
 		bool write_byte(char data);

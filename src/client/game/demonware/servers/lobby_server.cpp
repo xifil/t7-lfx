@@ -6,9 +6,9 @@
 
 #include <utils/cryptography.hpp>
 
-namespace demonware
-{
-	lobby_server::lobby_server(std::string name) : tcp_server(std::move(name))
+namespace demonware {
+	lobby_server::lobby_server(std::string name)
+		: tcp_server(std::move(name))
 	{
 		this->register_service<bdAnticheat>();
 		this->register_service<bdBandwidthTest>();
@@ -39,69 +39,63 @@ namespace demonware
 		this->register_service<bdReward>();
 	};
 
-	void lobby_server::send_reply(reply* data)
-	{
-		if (!data) return;
+	void lobby_server::send_reply(reply* data) {
+		if (!data) {
+			return;
+		}
 		this->send(data->data());
 	}
 
-	void lobby_server::handle(const std::string& packet)
-	{
+	void lobby_server::handle(const std::string& packet) {
 		byte_buffer buffer(packet);
 		buffer.set_use_data_types(false);
 
-		try
-		{
-			while (buffer.has_more_data())
-			{
+		try {
+			while (buffer.has_more_data()) {
 				int size;
 				buffer.read_int32(&size);
 
-				if (size <= 0)
-				{
+				if (size <= 0) {
 					const std::string zero("\x00\x00\x00\x00", 4);
 					raw_reply reply(zero);
 					this->send_reply(&reply);
 					return;
 				}
-				else if (size == 0xC8)
-				{
-#ifndef NDEBUG
-					printf("[DW]: [lobby]: received client_header_ack.\n");
-#endif
+				else if (size == 0xC8) {
+#					ifndef NDEBUG
+						printf("[DW]: [lobby]: received client_header_ack.\n");
+#					endif
 
 					int c8;
 					buffer.read_int32(&c8);
 					std::string packet_1 = buffer.get_remaining();
 					demonware::queue_packet_to_hash(packet_1);
 
-					const std::string packet_2(
-						"\x16\x00\x00\x00\xab\x81\xd2\x00\x00\x00\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37",
-						26);
+					const std::string packet_2("\x16\x00\x00\x00\xAB\x81\xD2\x00\x00\x00\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37", 26);
 					demonware::queue_packet_to_hash(packet_2);
 
 					raw_reply reply(packet_2);
 					this->send_reply(&reply);
-#ifndef NDEBUG
-					printf("[DW]: [lobby]: sending server_header_ack.\n");
-#endif
+#					ifndef NDEBUG
+						printf("[DW]: [lobby]: sending server_header_ack.\n");
+#					endif
 					return;
 				}
 
-				if (buffer.size() < size_t(size)) return;
+				if (buffer.size() < size_t(size)) {
+					return;
+				}
 
 				uint8_t check_ab;
 				buffer.read_ubyte(&check_ab);
-				if (check_ab == 0xAB)
-				{
+				if (check_ab == 0xAB) {
 					uint8_t type;
 					buffer.read_ubyte(&type);
 
-					if (type == 0x82)
-					{
-#ifndef NDEBUG
-						printf("[DW]: [lobby]: received client_auth.\n");
-#endif
+					if (type == 0x82) {
+#						ifndef NDEBUG
+							printf("[DW]: [lobby]: received client_auth.\n");
+#						endif
 						std::string packet_3(packet.data(), packet.size() - 8); // this 8 are client hash check?
 
 						demonware::queue_packet_to_hash(packet_3);
@@ -114,13 +108,12 @@ namespace demonware
 						raw_reply reply(response);
 						this->send_reply(&reply);
 
-#ifndef NDEBUG
-						printf("[DW]: [lobby]: sending server_auth_done.\n");
-#endif
+#						ifndef NDEBUG
+							printf("[DW]: [lobby]: sending server_auth_done.\n");
+#						endif
 						return;
 					}
-					else if (type == 0x85)
-					{
+					else if (type == 0x85) {
 						uint32_t msg_count;
 						buffer.read_uint32(&msg_count);
 
@@ -132,8 +125,7 @@ namespace demonware
 						char hash[8];
 						std::memcpy(hash, &(enc.data()[enc.size() - 8]), 8);
 
-						std::string dec = utils::cryptography::aes::decrypt(
-							std::string(enc.data(), enc.size() - 8), std::string(seed, 16),
+						std::string dec = utils::cryptography::aes::decrypt(std::string(enc.data(), enc.size() - 8), std::string(seed, 16),
 							demonware::get_decrypt_key());
 
 						byte_buffer serv(dec);
@@ -158,21 +150,16 @@ namespace demonware
 				return;
 			}
 		}
-		catch (...)
-		{
-		}
+		catch (...) {}
 	}
 
-	void lobby_server::call_service(const uint8_t id, const std::string& data)
-	{
+	void lobby_server::call_service(const uint8_t id, const std::string& data) {
 		const auto& it = this->services_.find(id);
 
-		if (it != this->services_.end())
-		{
+		if (it != this->services_.end()) {
 			it->second->exec_task(this, data);
 		}
-		else
-		{
+		else {
 			printf("[DW]: [lobby]: missing service '%s'\n", utils::string::va("%d", id));
 
 			// return no error

@@ -1,25 +1,23 @@
 #pragma once
 
-namespace demonware
-{
-	class bdFacebook final : public service
-	{
+namespace demonware {
+	class bdFacebook final : public service {
 	public:
 		bdFacebook();
 
 	private:
-		void registerAccount(service_server* server, byte_buffer* buffer) const;
+		void register_account(service_server* server, byte_buffer* buffer) const;
 		void post(service_server* server, byte_buffer* buffer) const;
-		void unregisterAccount(service_server* server, byte_buffer* buffer) const;
-		void isRegistered(service_server* server, byte_buffer* buffer) const;
-		void getInfo(service_server* server, byte_buffer* buffer) const;
-		void getRegisteredAccounts(service_server* server, byte_buffer* buffer) const;
-		void getFriends(service_server* server, byte_buffer* buffer) const;
-		void getProfilePictures(service_server* server, byte_buffer* buffer) const;
-		void uploadPhoto(service_server* server, byte_buffer* buffer) const;
-		void registerToken(service_server* server, byte_buffer* buffer) const;
-		void uploadVideo(service_server* server, byte_buffer* buffer) const;
-		void getFriendsByID(service_server* server, byte_buffer* buffer) const;
-		void setLikeStatus(service_server* server, byte_buffer* buffer) const;
+		void unregister_account(service_server* server, byte_buffer* buffer) const;
+		void is_registered(service_server* server, byte_buffer* buffer) const;
+		void get_info(service_server* server, byte_buffer* buffer) const;
+		void get_registered_accounts(service_server* server, byte_buffer* buffer) const;
+		void get_friends(service_server* server, byte_buffer* buffer) const;
+		void get_profile_pictures(service_server* server, byte_buffer* buffer) const;
+		void upload_photo(service_server* server, byte_buffer* buffer) const;
+		void register_token(service_server* server, byte_buffer* buffer) const;
+		void upload_video(service_server* server, byte_buffer* buffer) const;
+		void get_friends_by_id(service_server* server, byte_buffer* buffer) const;
+		void set_like_status(service_server* server, byte_buffer* buffer) const;
 	};
 }

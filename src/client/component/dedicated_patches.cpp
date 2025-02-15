@@ -5,95 +5,78 @@
 #include <utils/hook.hpp>
 #include <utils/string.hpp>
 
-namespace dedicated_patches
-{
-	namespace
-	{
+namespace dedicated_patches {
+	namespace {
 		utils::hook::detour spawn_server_hook;
 
-		void scr_are_textures_loaded_stub()
-		{
+		void scr_are_textures_loaded_stub() {
 			game::Scr_AddInt(game::SCRIPTINSTANCE_SERVER, 1);
 		}
 
-		game::eNetworkModes get_online_mode_stub()
-		{
+		game::eNetworkModes get_online_mode_stub() {
 			return game::MODE_NETWORK_ONLINE;
 		}
 
-		bool is_online_stub()
-		{
+		bool is_online_stub() {
 			return true;
 		}
 
-		bool is_mod_loaded_stub()
-		{
+		bool is_mod_loaded_stub() {
 			return false;
 		}
 
-		void patch_is_mod_loaded_checks()
-		{
-			const std::vector<uintptr_t> is_mod_loaded_addresses =
-			{
-				{0x14019CFC4_g},
-				{0x14024D4A0_g},
-				{0x14024D669_g},
-				{0x14024D939_g},
-				{0x14024DC64_g},
-				{0x14024E13A_g},
-				{0x14024E5A3_g},
-				{0x14024FFB9_g},
-				{0x140251E9E_g},
-				{0x140253680_g},
-				{0x140257BF6_g},
-				{0x1402D296D_g},
-				{0x1402D58E9_g},
-				{0x140468374_g},
-				{0x14046B796_g},
-				{0x14048003D_g},
+		void patch_is_mod_loaded_checks() {
+			const std::vector<uintptr_t> is_mod_loaded_addresses = {
+				{ 0x14019CFC4_g },
+				{ 0x14024D4A0_g },
+				{ 0x14024D669_g },
+				{ 0x14024D939_g },
+				{ 0x14024DC64_g },
+				{ 0x14024E13A_g },
+				{ 0x14024E5A3_g },
+				{ 0x14024FFB9_g },
+				{ 0x140251E9E_g },
+				{ 0x140253680_g },
+				{ 0x140257BF6_g },
+				{ 0x1402D296D_g },
+				{ 0x1402D58E9_g },
+				{ 0x140468374_g },
+				{ 0x14046B796_g },
+				{ 0x14048003D_g },
 			};
 
-			for (const auto& address : is_mod_loaded_addresses)
-			{
+			for (const auto& address : is_mod_loaded_addresses) {
 				utils::hook::call(address, is_mod_loaded_stub);
 			}
 		}
 
-		void spawn_server_stub(int controllerIndex, const char* server, game::MapPreload preload, bool savegame)
-		{
+		void spawn_server_stub(int controllerIndex, const char* server, game::MapPreload preload, bool savegame) {
 			game::Com_SessionMode_SetNetworkMode(game::MODE_NETWORK_ONLINE);
 			game::Com_SessionMode_SetGameMode(game::MODE_GAME_MATCHMAKING_PLAYLIST);
 
 			spawn_server_hook.invoke(controllerIndex, server, preload, savegame);
 		}
 
-		uint64_t sv_get_player_xuid_stub(const int client_num)
-		{
+		uint64_t sv_get_player_xuid_stub(const int client_num) {
 			const auto* clients = *game::svs_clients;
-			if (!clients)
-			{
+			if (!clients) {
 				return 0;
 			}
 
 			return clients[client_num].xuid;
 		}
 
-		void info_set_value_for_key_stub(char* s, const char* key, [[maybe_unused]] const char* value)
-		{
+		void info_set_value_for_key_stub(char* s, const char* key, [[maybe_unused]] const char* value) {
 			game::Info_SetValueForKey(s, key, "Unknown Soldier");
 		}
 
-		const char* va_stub([[maybe_unused]] const char* fmt, const char* name, [[maybe_unused]] const int client_num)
-		{
+		const char* va_stub([[maybe_unused]] const char* fmt, const char* name, [[maybe_unused]] const int client_num) {
 			return utils::string::va("%s", name);
 		}
 	}
 
-	struct component final : server_component
-	{
-
-		void post_unpack() override
-		{
+	struct component final : server_component {
+		void post_unpack() override {
 			// Fix infinite loop
 			utils::hook::jump(0x1402E86B0_g, scr_are_textures_loaded_stub);
 

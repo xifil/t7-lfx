@@ -1,9 +1,7 @@
 #pragma once
 
-namespace demonware
-{
-	class bdBandwidthTest final : public service
-	{
+namespace demonware {
+	class bdBandwidthTest final : public service {
 	public:
 		bdBandwidthTest();
 

@@ -1,24 +1,20 @@
 #pragma once
 
-namespace steam
-{
-	typedef enum EMatchMakingServerResponse
-	{
+namespace steam {
+	typedef enum EMatchMakingServerResponse {
 		eServerResponded = 0,
 		eServerFailedToRespond,
 		eNoServersListedOnMasterServer
 	} matchmaking_server_response;
 
-	class servernetadr_t
-	{
+	class servernetadr_t {
 	public:
 		uint16_t m_usConnectionPort;
 		uint16_t m_usQueryPort;
 		uint32_t m_unIP;
 	};
 
-	class gameserveritem_t
-	{
+	class gameserveritem_t {
 	public:
 		servernetadr_t m_NetAdr;
 		int m_nPing;
@@ -40,38 +36,34 @@ namespace steam
 		steam_id m_steamID;
 	};
 
-	class matchmaking_ping_response
-	{
+	class matchmaking_ping_response {
 	public:
 		virtual void ServerResponded(gameserveritem_t& server) = 0;
 		virtual void ServerFailedToRespond() = 0;
 	};
 
-	class matchmaking_server_list_response
-	{
+	class matchmaking_server_list_response {
 	public:
 		virtual void ServerResponded(void* hRequest, int iServer) = 0;
 		virtual void ServerFailedToRespond(void* hRequest, int iServer) = 0;
 		virtual void RefreshComplete(void* hRequest, matchmaking_server_response response) = 0;
 	};
 
-	class matchmaking_servers
-	{
+	class matchmaking_servers {
 	public:
 		~matchmaking_servers() = default;
 
 		virtual void* RequestInternetServerList(unsigned int iApp, void** ppchFilters, unsigned int nFilters,
-		                                        matchmaking_server_list_response* pRequestServersResponse);
-		virtual void* RequestLANServerList(unsigned int iApp,
-		                                   matchmaking_server_list_response* pRequestServersResponse);
+			matchmaking_server_list_response* pRequestServersResponse);
+		virtual void* RequestLANServerList(unsigned int iApp, matchmaking_server_list_response* pRequestServersResponse);
 		virtual void* RequestFriendsServerList(unsigned int iApp, void** ppchFilters, unsigned int nFilters,
-		                                       matchmaking_server_list_response* pRequestServersResponse);
+			matchmaking_server_list_response* pRequestServersResponse);
 		virtual void* RequestFavoritesServerList(unsigned int iApp, void** ppchFilters, unsigned int nFilters,
-		                                         matchmaking_server_list_response* pRequestServersResponse);
+			matchmaking_server_list_response* pRequestServersResponse);
 		virtual void* RequestHistoryServerList(unsigned int iApp, void** ppchFilters, unsigned int nFilters,
-		                                       matchmaking_server_list_response* pRequestServersResponse);
+			matchmaking_server_list_response* pRequestServersResponse);
 		virtual void* RequestSpectatorServerList(unsigned int iApp, void** ppchFilters, unsigned int nFilters,
-		                                         matchmaking_server_list_response* pRequestServersResponse);
+			matchmaking_server_list_response* pRequestServersResponse);
 		virtual void ReleaseRequest(void* hServerListRequest);
 		virtual gameserveritem_t* GetServerDetails(void* hRequest, int iServer);
 		virtual void CancelQuery(void* hRequest);

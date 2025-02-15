@@ -4,22 +4,17 @@
 
 #include <utils/hook.hpp>
 
-namespace status
-{
-	namespace
-	{
+namespace status {
+	namespace {
 		thread_local int g_client_num{ 0 };
 
-		void print_client_num(const int channel, const int label, const char* fmt, const int client_num)
-		{
+		void print_client_num(const int channel, const int label, const char* fmt, const int client_num) {
 			g_client_num = client_num;
 			game::Com_Printf(channel, label, fmt, client_num);
 		}
 
-		void print_client_xuid(const int channel, const int label, [[maybe_unused]] const char* fmt, const uint64_t xuid)
-		{
-			if (game::SV_IsTestClient(g_client_num))
-			{
+		void print_client_xuid(const int channel, const int label, [[maybe_unused]] const char* fmt, const uint64_t xuid) {
+			if (game::SV_IsTestClient(g_client_num)) {
 				game::Com_Printf(channel, label, "%16s ", "bot0");
 				return;
 			}
@@ -28,10 +23,8 @@ namespace status
 		}
 	}
 
-	struct component final : generic_component
-	{
-		void post_unpack() override
-		{
+	struct component final : generic_component {
+		void post_unpack() override {
 			// Patch the status command for test clients
 			utils::hook::call(game::select(0x142246E37, 0x14052C527), print_client_num);
 			utils::hook::call(game::select(0x142246EDE, 0x14052C5CE), print_client_xuid);

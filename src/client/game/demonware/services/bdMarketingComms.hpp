@@ -1,14 +1,12 @@
 #pragma once
 
-namespace demonware
-{
-	class bdMarketingComms final : public service
-	{
+namespace demonware {
+	class bdMarketingComms final : public service {
 	public:
 		bdMarketingComms();
 
 	private:
-		void getMessages(service_server* server, byte_buffer* buffer) const;
-		void reportFullMessagesViewed(service_server* server, byte_buffer* buffer) const;
+		void get_messages(service_server* server, byte_buffer* buffer) const;
+		void report_full_messages_viewed(service_server* server, byte_buffer* buffer) const;
 	};
 }

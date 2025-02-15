@@ -1,8 +1,7 @@
 #pragma once
 #include "component_interface.hpp"
 
-namespace component_loader
-{
+namespace component_loader {
 	using registration_functor = std::function<std::unique_ptr<generic_component>()>;
 
 	void register_component(registration_functor functor, component_type type);
@@ -14,24 +13,19 @@ namespace component_loader
 
 	[[noreturn]] void trigger_premature_shutdown();
 
-	class premature_shutdown_trigger final : public std::exception
-	{
-		[[nodiscard]] const char* what() const noexcept override
-		{
+	class premature_shutdown_trigger final : public std::exception {
+		[[nodiscard]] const char* what() const noexcept override {
 			return "Premature shutdown requested";
 		}
 	};
 
 	template <typename T>
-	class installer final
-	{
+	class installer final {
 		static_assert(std::is_base_of_v<generic_component, T>, "component has invalid base class");
 
 	public:
-		installer()
-		{
-			register_component([]
-			{
+		installer() {
+			register_component([] {
 				return std::make_unique<T>();
 			}, T::type);
 		}
@@ -39,7 +33,6 @@ namespace component_loader
 };
 
 #define REGISTER_COMPONENT(name)                   \
-namespace                                          \
-{                                                  \
+namespace {                                        \
 	component_loader::installer<name> __component; \
 }

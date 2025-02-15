@@ -6,52 +6,41 @@
 #include <utils/string.hpp>
 #include <utils/io.hpp>
 
-namespace gamesettings
-{
-	namespace
-	{
+namespace gamesettings {
+	namespace {
 		// <name, path>
 		std::unordered_map<std::string, std::string> game_settings_files;
 
-		std::string get_game_settings_name(const std::vector<std::string>& sub_strings)
-		{
-			if (sub_strings.size() > 2)
-			{
+		std::string get_game_settings_name(const std::vector<std::string>& sub_strings) {
+			if (sub_strings.size() > 2) {
 				return sub_strings[sub_strings.size() - 2] + '/' + sub_strings[sub_strings.size() - 1];
 			}
 
 			return {};
 		}
 
-		std::string get_game_settings_path(const std::string& name)
-		{
+		std::string get_game_settings_path(const std::string& name) {
 			const auto itr = game_settings_files.find(name);
 			return (itr == game_settings_files.end()) ? std::string() : itr->second;
 		}
 
-		void search_game_settings_folder(const std::string& game_settings_dir)
-		{
-			if (!utils::io::directory_exists(game_settings_dir))
-			{
+		void search_game_settings_folder(const std::string& game_settings_dir) {
+			if (!utils::io::directory_exists(game_settings_dir)) {
 				return;
 			}
 
 			const auto files = utils::io::list_files(game_settings_dir, true);
 
-			for (const auto& path : files)
-			{
-				if (!std::filesystem::is_directory(path))
-				{
+			for (const auto& path : files) {
+				if (!std::filesystem::is_directory(path)) {
 					auto sub_strings = utils::string::split(path.generic_string(), '/');
 					game_settings_files.insert_or_assign(get_game_settings_name(sub_strings), path.generic_string());
 				}
 			}
 		}
 
-		bool has_game_settings_file_on_disk(const char* path)
-		{
-			if (!path)
-			{
+		bool has_game_settings_file_on_disk(const char* path) {
+			if (!path) {
 				return false;
 			}
 
@@ -61,8 +50,7 @@ namespace gamesettings
 			return !get_game_settings_path(game_settings_name).empty();
 		}
 
-		void cmd_exec_stub(utils::hook::assembler& a)
-		{
+		void cmd_exec_stub(utils::hook::assembler& a) {
 			const auto exec_from_fastfile = a.newLabel();
 			const auto exec_from_disk = a.newLabel();
 
@@ -71,7 +59,7 @@ namespace gamesettings
 			a.mov(rcx, r10);
 			a.call_aligned(has_game_settings_file_on_disk);
 			a.cmp(rax, 1);
-;
+
 			a.popad64();
 
 			a.jnz(exec_from_fastfile);
@@ -84,16 +72,14 @@ namespace gamesettings
 			a.jmp(game::select(0x1420ED007, 0x1404F853F));
 		}
 
-		int read_file_stub(const char* qpath, void** buffer)
-		{
+		int read_file_stub(const char* qpath, void** buffer) {
 			const auto sub_strings = utils::string::split(qpath, '/');
 			const auto game_settings_name = get_game_settings_name(sub_strings);
 
 			std::string gamesettings_data;
 			utils::io::read_file(get_game_settings_path(game_settings_name), &gamesettings_data);
 
-			if (!gamesettings_data.empty())
-			{
+			if (!gamesettings_data.empty()) {
 				++(*game::fs_loadStack);
 
 				auto len = static_cast<int>(gamesettings_data.length());
@@ -109,8 +95,7 @@ namespace gamesettings
 			return utils::hook::invoke<int>(game::select(0x1422A48D0, 0x140564F70), qpath, buffer);
 		}
 
-		void search_gamesettings_files_on_disk()
-		{
+		void search_gamesettings_files_on_disk() {
 			const utils::nt::library host{};
 
 			search_game_settings_folder((game::get_appdata_path() / "data/gamesettings").string());
@@ -118,10 +103,8 @@ namespace gamesettings
 		}
 	}
 
-	struct component final : generic_component
-	{
-		void post_unpack() override
-		{
+	struct component final : generic_component {
+		void post_unpack() override {
 			search_gamesettings_files_on_disk();
 
 			utils::hook::call(game::select(0x1420ED0A1, 0x1404F857D), read_file_stub);

@@ -1,23 +1,21 @@
 #pragma once
 
-namespace demonware
-{
-	class bdUserGroups final : public service
-	{
+namespace demonware {
+	class bdUserGroups final : public service {
 	public:
 		bdUserGroups();
 
 	private:
-		void createGroup(service_server* server, byte_buffer* buffer) const;
-		void deleteGroup(service_server* server, byte_buffer* buffer) const;
-		void joinGroup(service_server* server, byte_buffer* buffer) const;
-		void leaveGroup(service_server* server, byte_buffer* buffer) const;
-		void getMembershipInfo(service_server* server, byte_buffer* buffer) const;
-		void changeMemberType(service_server* server, byte_buffer* buffer) const;
-		void getNumMembers(service_server* server, byte_buffer* buffer) const;
-		void getMembers(service_server* server, byte_buffer* buffer) const;
-		void getMemberships(service_server* server, byte_buffer* buffer) const;
-		void readStatsByRank(service_server* server, byte_buffer* buffer) const;
-		void getGroupLists(service_server* server, byte_buffer* buffer) const;
+		void create_group(service_server* server, byte_buffer* buffer) const;
+		void delete_group(service_server* server, byte_buffer* buffer) const;
+		void join_group(service_server* server, byte_buffer* buffer) const;
+		void leave_group(service_server* server, byte_buffer* buffer) const;
+		void get_membership_info(service_server* server, byte_buffer* buffer) const;
+		void change_member_type(service_server* server, byte_buffer* buffer) const;
+		void get_num_members(service_server* server, byte_buffer* buffer) const;
+		void get_members(service_server* server, byte_buffer* buffer) const;
+		void get_memberships(service_server* server, byte_buffer* buffer) const;
+		void read_stats_by_rank(service_server* server, byte_buffer* buffer) const;
+		void get_group_lists(service_server* server, byte_buffer* buffer) const;
 	};
 }
