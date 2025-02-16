@@ -8,56 +8,80 @@
   <img src="assets/github/banner.png?raw=true" />
 </p-->
 
-NOTE: You must legally own [Call of Duty®: Black Ops III](https://store.steampowered.com/app/311210/) to run this mod. Cracked/Pirated versions of the game are **NOT** supported.
+NOTE: You must legally own [Call of Duty®: Black Ops III](https://store.steampowered.com/app/311210/) (Steam) to run this mod. Cracked/Pirated versions of the game are **NOT** supported, and neither is the Microsoft Store version.
 
 ## Improvements made
+
+Here are some improvements made over the original T7x/BOIII/Ezz BOIII:
 
 <details>
   <summary>
     Code styling
   </summary>
-  <div style="margin-left:16px;">
+  <hr/>
     Before, the general code style of this project was as follows:
-<pre><code class="cpp">
+<pre lang="cpp">
 void function_name()
 {
     if (condition)
     {
         // ...
     }
-
+&nbsp;
     for (auto x = 0; x < etc; x++)
     {
         // ...
     }
-
+&nbsp;
     if (single_line_condition) return;
-
+&nbsp;
     printf("%s: very long statement!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-           "string here")
+           "string here");
 }
-</code></pre>
-    For the sake of anyone who wants to dev this (including me), this has been swiftly changed to what (in my opinion) is just a better way to format code.  
+</pre>
+    For the sake of anyone who wants to dev this (including me), this has been swiftly changed to what (in my opinion) is just a better way to format code. <br/>
     Single line statements have been removed, spacing in long statements trimmed to one tab, brackets don't always go on next line, etc. The same sample code would be as follows:
-<pre><code class="cpp">
+<pre lang="cpp">
 void function_name() {
     if (condition) {
         // ...
     }
-
+&nbsp;
     for (auto x = 0; x < etc; x++) {
         // ...
     }
-
+&nbsp;
     if (single_line_condition) {
         return; // no longer single line
     }
-
+&nbsp;
     printf("%s: very long statement!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-        "string here")
+        "string here");
 }
-</code></pre>
-  </div>
+</pre>
+  <hr/>
+</details>
+
+<details>
+  <summary>
+    Deauthorisation mode
+  </summary>
+  <hr/>
+    If you are a comical person and have been robbed of your oh so special (and real 🤨) Steam account with Black Ops III, fear not, you can still use this mod. Simply add <code>-spacewar</code> to the command - you should run the following: <br/>
+    <br/>
+<pre lang="cmd">
+boiii.exe -spacewar
+</pre>
+    <br/>
+    This works because I have changed the way Steam initialised with this flag, instead using Spacewar as the base app ID instead of Black Ops III.<br/>
+    <br/>
+<pre lang="cpp">
+unsigned int utils::GetAppID() {
+    static const auto spacewar = ::utils::flags::has_flag("spacewar");
+    return spacewar ? 480 /* Spacewar */ : 311210 /* Call of Duty: Black Ops III */;
+}
+</pre>
+  <hr/>
 </details>
 
 ## Compile from source
@@ -72,8 +96,6 @@ void function_name() {
 |:----------------------------|:-----------------------------------------------|
 | `--copy-to=PATH`            | Optional, copy the EXE to a custom folder after build, define the path here if wanted. |
 | `--dev-build`               | Enable development builds of the client. |
-
-<br/>
 
 ## Disclaimer
 
