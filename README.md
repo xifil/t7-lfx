@@ -10,6 +10,56 @@
 
 NOTE: You must legally own [Call of Duty®: Black Ops III](https://store.steampowered.com/app/311210/) to run this mod. Cracked/Pirated versions of the game are **NOT** supported.
 
+## Improvements made
+
+<details>
+  <summary>
+    Code styling
+  </summary>
+  <div style="margin-left:16px;">
+    Before, the general code style of this project was as follows:
+<pre><code class="cpp">
+void function_name()
+{
+    if (condition)
+    {
+        // ...
+    }
+
+    for (auto x = 0; x < etc; x++)
+    {
+        // ...
+    }
+
+    if (single_line_condition) return;
+
+    printf("%s: very long statement!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+           "string here")
+}
+</code></pre>
+    For the sake of anyone who wants to dev this (including me), this has been swiftly changed to what (in my opinion) is just a better way to format code.  
+    Single line statements have been removed, spacing in long statements trimmed to one tab, brackets don't always go on next line, etc. The same sample code would be as follows:
+<pre><code class="cpp">
+void function_name() {
+    if (condition) {
+        // ...
+    }
+
+    for (auto x = 0; x < etc; x++) {
+        // ...
+    }
+
+    if (single_line_condition) {
+        return; // no longer single line
+    }
+
+    printf("%s: very long statement!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+        "string here")
+}
+</code></pre>
+  </div>
+</details>
+
 ## Compile from source
 
 - Clone the Git repo. Do NOT download it as ZIP, that won't work.
