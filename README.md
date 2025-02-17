@@ -95,7 +95,36 @@ unsigned int utils::GetAppID() {
 client_display_name [name]
 </pre>
     <br/>
+    It will look like this: <br/>
     <img src="assets/github/client_display_name.png" />
+  <hr/>
+</details>
+
+<details>
+  <summary>
+    File verification
+  </summary>
+  <hr/>
+    If you need to verify your files without Steam: <br/>
+    <br/>
+<pre lang="cmd">
+boiii.exe -verify
+</pre>
+    <br/>
+    After pressing <code>Play</code>, your files will be verified in accordance to <a href="https://github.com/xifil/t7-lfx/blob/main/src/client/component/verifier.cpp">stored hashes in the code</a>.
+  <hr/>
+</details>
+
+<details>
+  <summary>
+    <code>ext.dll</code>
+  </summary>
+  <hr/>
+    <code>ext.dll</code> is the file responsible for patching various exploits in Black Ops III, such as RCE exploits. Due to it being protected (for obvious reasons), it automatically closes the game when it detects IDA, x64dbg, Scylla, a debugger, or similar tools, which hinders the development process. The message boxes it gives out have been threaded (instead of blocking the entire execution, bruh.) and there is now a way to launch BOIII without <code>ext.dll</code> being loaded at all by using the launch flag: <br/>
+    <br/>
+<pre lang="cmd">
+boiii.exe -noext
+</pre>
   <hr/>
 </details>
 

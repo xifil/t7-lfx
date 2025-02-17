@@ -95,8 +95,7 @@ namespace updater {
 		}
 	}
 
-	file_updater::file_updater(progress_listener& listener, std::filesystem::path base,
-		std::filesystem::path process_file)
+	file_updater::file_updater(progress_listener& listener, std::filesystem::path base, std::filesystem::path process_file)
 		: listener_(listener)
 		, base_(std::move(base))
 		, process_file_(std::move(process_file))

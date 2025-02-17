@@ -7,9 +7,10 @@
 #include "command.hpp"
 #include "scheduler.hpp"
 
+#include <utils/concurrency.hpp>
+#include <utils/flags.hpp>
 #include <utils/hook.hpp>
 #include <utils/properties.hpp>
-#include <utils/concurrency.hpp>
 #include <utils/string.hpp>
 
 namespace branding {
@@ -57,10 +58,13 @@ namespace branding {
 				return;
 			}
 
-			const char* text = utils::string::va("%s: " VERSION, get_client_display_name());
-			game::R_AddCmdDrawText(text, std::numeric_limits<int>::max(), font, static_cast<float>(x),
-			                       y + static_cast<float>(font[2]) * scale,
-			                       scale, scale, 0.0f, color, game::ITEM_TEXTSTYLE_NORMAL);
+			static bool no_ext = utils::flags::has_flag("noext");
+
+			const char* text = utils::string::va("%s: " VERSION "%s", get_client_display_name(),
+				no_ext ? "\n^3Warning: ext.dll is not loaded" : "");
+			game::R_AddCmdDrawText(text, std::numeric_limits<int>::max(), font,
+				static_cast<float>(x), y + static_cast<float>(font[2]) * scale,
+				scale, scale, 0.0f, color, game::ITEM_TEXTSTYLE_NORMAL);
 		}
 
 		const char* get_ingame_console_prefix_stub() {
