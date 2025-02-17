@@ -84,6 +84,21 @@ unsigned int utils::GetAppID() {
   <hr/>
 </details>
 
+<details>
+  <summary>
+    Client display name
+  </summary>
+  <hr/>
+    You can now change the client name in the top-left corner, and console prefix with one ingame command: <br/>
+    <br/>
+<pre lang="cmd">
+client_display_name [name]
+</pre>
+    <br/>
+    <img src="assets/github/client_display_name.png" />
+  <hr/>
+</details>
+
 ## Compile from source
 
 - Clone the Git repo. Do NOT download it as ZIP, that won't work.
