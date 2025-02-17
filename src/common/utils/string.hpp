@@ -105,6 +105,8 @@ namespace utils::string {
 
 	std::string replace(std::string str, const std::string& from, const std::string& to);
 
+	std::string join(std::vector<std::string> strings, std::string joiner);
+
 	void trim(std::string& str);
 
 	void copy(char* dest, size_t max_size, const char* src);

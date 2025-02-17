@@ -176,6 +176,17 @@ namespace utils::string {
 		return str;
 	}
 
+	std::string join(std::vector<std::string> strings, std::string joiner) {
+		std::string joined;
+		for (std::size_t x = 0; x < strings.size(); x++) {
+			joined += strings[x];
+			if (x < strings.size() - 1) {
+				joined += joiner;
+			}
+		}
+		return joined;
+	}
+
 	std::string& ltrim(std::string& str) {
 		str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](const unsigned char input) {
 			return !std::isspace(input);
@@ -185,7 +196,7 @@ namespace utils::string {
 	}
 
 	std::string& rtrim(std::string& str) {
-		str.erase(std::find_if(str.rbegin(), str.rend(), [](const  unsigned char input) {
+		str.erase(std::find_if(str.rbegin(), str.rend(), [](const unsigned char input) {
 			return !std::isspace(input);
 		}).base(), str.end());
 
