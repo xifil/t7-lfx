@@ -128,6 +128,22 @@ boiii.exe -noext
   <hr/>
 </details>
 
+<details>
+  <summary>
+    Module dumper
+  </summary>
+  <hr/>
+    Due to the fact that <code>ext.dll</code> panics whenever it sees Scylla, IDA, x64dbg, or any other debugging tools, a command to dump modules has been added to the game, it uses Scylla's code so will produce an identical dump to that of Scylla. <br/>
+    <br/>
+<pre lang="cmd">
+dump &lt;name>
+</pre>
+    <br/>
+    If you entered a valid module name, it will use that, enter nothing it will default to <code>boiii.exe</code>, and it will look something like this: <br/>
+    <img src="assets/github/dump.png" />
+  <hr/>
+</details>
+
 ## Compile from source
 
 - Clone the Git repo. Do NOT download it as ZIP, that won't work.
@@ -152,6 +168,7 @@ liable for misuse of the software. Use responsibly.
 
 - [boiii-free](https://github.com/Ezz-lol/boiii-free) - codebase
 - [Likeicareaboutit](https://www.github.com/Likeicareaboutit) - Steam workshop downloader
+- [Scylla](https://www.github.com/NtQuery/Scylla) - module dumper
 
 ---
 
